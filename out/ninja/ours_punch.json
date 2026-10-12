@@ -1,0 +1,8 @@
+{
+  "frame_width": 37,
+  "frame_height": 33,
+  "frames": 8,
+  "fps": 10,
+  "sheet": "ours_punch_sheet.png",
+  "layout": "horizontal"
+}

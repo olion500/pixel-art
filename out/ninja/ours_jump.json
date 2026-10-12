@@ -1,0 +1,8 @@
+{
+  "frame_width": 36,
+  "frame_height": 40,
+  "frames": 12,
+  "fps": 10,
+  "sheet": "ours_jump_sheet.png",
+  "layout": "horizontal"
+}

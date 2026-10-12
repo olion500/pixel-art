@@ -1,0 +1,8 @@
+{
+  "frame_width": 33,
+  "frame_height": 33,
+  "frames": 8,
+  "fps": 8,
+  "sheet": "ours_idle_sheet.png",
+  "layout": "horizontal"
+}
