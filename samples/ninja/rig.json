@@ -15,6 +15,14 @@
     10
    ]
   ],
+  "head": [
+   [
+    15,
+    0,
+    28,
+    10
+   ]
+  ],
   "front_arm": [
    [
     23,
@@ -45,20 +53,22 @@
   ],
   "legs": [
    [
-    4,
-    23,
-    31,
+    5,
+    22,
+    30,
     32
    ]
   ]
  },
  "draw_order": [
-  "back_arm",
+  "limbs_back",
   "legs",
+  "back_arm",
   "body",
+  "head",
   "scarf",
   "front_arm",
-  "limb"
+  "limbs_front"
  ],
  "cloth": {
   "scarf": {
@@ -68,19 +78,12 @@
   }
  },
  "pivots": {
-  "_center": [
-   16,
-   22
+  "torso": [
+   17,
+   21
   ]
  },
  "floor_y": 32,
- "fist_part": "front_arm",
- "fist_rect": [
-  25,
-  16,
-  29,
-  21
- ],
  "colors": {
   "outline": [
    2,
@@ -122,6 +125,9 @@
      },
      "scarf": {
       "dy": 0
+     },
+     "head": {
+      "dy": 0
      }
     },
     {
@@ -136,6 +142,9 @@
      },
      "scarf": {
       "dy": 0
+     },
+     "head": {
+      "dy": 0
      }
     },
     {
@@ -150,19 +159,8 @@
      },
      "scarf": {
       "dy": 1
-     }
-    },
-    {
-     "body": {
-      "dy": 1
      },
-     "back_arm": {
-      "dy": 1
-     },
-     "front_arm": {
-      "dy": 1
-     },
-     "scarf": {
+     "head": {
       "dy": 1
      }
     },
@@ -178,6 +176,9 @@
      },
      "scarf": {
       "dy": 1
+     },
+     "head": {
+      "dy": 1
      }
     },
     {
@@ -192,6 +193,26 @@
      },
      "scarf": {
       "dy": 1
+     },
+     "head": {
+      "dy": 1
+     }
+    },
+    {
+     "body": {
+      "dy": 1
+     },
+     "back_arm": {
+      "dy": 1
+     },
+     "front_arm": {
+      "dy": 1
+     },
+     "scarf": {
+      "dy": 1
+     },
+     "head": {
+      "dy": 1
      }
     },
     {
@@ -206,6 +227,9 @@
      },
      "scarf": {
       "dy": 0
+     },
+     "head": {
+      "dy": 0
      }
     },
     {
@@ -219,6 +243,9 @@
       "dy": 0
      },
      "scarf": {
+      "dy": 0
+     },
+     "head": {
       "dy": 0
      }
     }
@@ -227,7 +254,7 @@
   "punch": {
    "canvas": [
     33,
-    37
+    40
    ],
    "offset": [
     0,
@@ -235,184 +262,443 @@
    ],
    "fps": 10,
    "keyframes": [
+    {},
     {
-     "body": {
-      "lean": 0
+     "torso": {
+      "rot": -4,
+      "dx": -1
      },
      "scarf": {
-      "lean": 0,
       "trail": 0
-     },
-     "back_arm": {
-      "lean": 0
      }
     },
     {
-     "body": {
-      "lean": 0
+     "torso": {
+      "rot": 4,
+      "dx": 1
      },
+     "hide": [
+      "legs",
+      "front_arm",
+      "back_arm"
+     ],
+     "limbs": [
+      {
+       "from": "hip_back",
+       "rel": [
+        [
+         -2,
+         3
+        ],
+        [
+         -7,
+         0
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_back",
+       "stamp_rot": -10,
+       "layer": "limbs_back",
+       "ground": true
+      },
+      {
+       "from": "hip_front",
+       "rel": [
+        [
+         2,
+         3
+        ],
+        [
+         3,
+         0
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_front",
+       "stamp_rot": 0,
+       "layer": "limbs_back",
+       "ground": true
+      },
+      {
+       "from": "shoulder_back_twist",
+       "rel": [
+        [
+         4,
+         2
+        ],
+        [
+         9,
+         0
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_back",
+       "layer": "limbs_back"
+      },
+      {
+       "from": "shoulder_front",
+       "rel": [
+        [
+         1,
+         3
+        ],
+        [
+         3,
+         1
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_front",
+       "layer": "limbs_front"
+      }
+     ],
      "scarf": {
-      "lean": 0,
-      "trail": 0
-     },
-     "back_arm": {
-      "lean": 0
-     },
-     "front_arm": {
-      "hide": true
-     },
-     "limb": {
-      "shoulder": [
-       21,
-       13
-      ],
-      "hand": [
-       25,
-       18
-      ],
-      "width": 1.2
-     }
-    },
-    {
-     "body": {
-      "lean": -1
-     },
-     "scarf": {
-      "lean": -1,
       "trail": 1
-     },
-     "back_arm": {
-      "lean": -1
-     },
-     "front_arm": {
-      "hide": true
-     },
-     "limb": {
-      "shoulder": [
-       20,
-       13
-      ],
-      "hand": [
-       23,
-       17
-      ],
-      "width": 1.2
      }
     },
     {
-     "body": {
-      "lean": 1
+     "torso": {
+      "rot": 9,
+      "dx": 3
      },
+     "hide": [
+      "legs",
+      "front_arm",
+      "back_arm"
+     ],
+     "limbs": [
+      {
+       "from": "hip_back",
+       "rel": [
+        [
+         -2,
+         3
+        ],
+        [
+         -7,
+         0
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_back",
+       "stamp_rot": -25,
+       "layer": "limbs_back",
+       "ground": true
+      },
+      {
+       "from": "hip_front",
+       "rel": [
+        [
+         2,
+         3
+        ],
+        [
+         5,
+         0
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_front",
+       "stamp_rot": 0,
+       "layer": "limbs_back",
+       "ground": true
+      },
+      {
+       "from": "shoulder_back_twist",
+       "rel": [
+        [
+         8,
+         0
+        ],
+        [
+         16,
+         0
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_back",
+       "layer": "limbs_back"
+      },
+      {
+       "from": "shoulder_front",
+       "rel": [
+        [
+         1,
+         3
+        ],
+        [
+         3,
+         1
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_front",
+       "layer": "limbs_front"
+      }
+     ],
      "scarf": {
-      "lean": 1,
       "trail": 2
-     },
-     "back_arm": {
-      "lean": 0
-     },
-     "front_arm": {
-      "hide": true
-     },
-     "limb": {
-      "shoulder": [
-       22,
-       13
-      ],
-      "hand": [
-       29,
-       14
-      ],
-      "width": 1.2
      }
     },
     {
-     "body": {
-      "lean": 1
+     "torso": {
+      "rot": 10,
+      "dx": 3
      },
+     "hide": [
+      "legs",
+      "front_arm",
+      "back_arm"
+     ],
+     "limbs": [
+      {
+       "from": "hip_back",
+       "rel": [
+        [
+         -2,
+         3
+        ],
+        [
+         -7,
+         0
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_back",
+       "stamp_rot": -25,
+       "layer": "limbs_back",
+       "ground": true
+      },
+      {
+       "from": "hip_front",
+       "rel": [
+        [
+         2,
+         3
+        ],
+        [
+         5,
+         0
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_front",
+       "stamp_rot": 0,
+       "layer": "limbs_back",
+       "ground": true
+      },
+      {
+       "from": "shoulder_back_twist",
+       "rel": [
+        [
+         9,
+         -1
+        ],
+        [
+         18,
+         -1
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_back",
+       "layer": "limbs_back"
+      },
+      {
+       "from": "shoulder_front",
+       "rel": [
+        [
+         1,
+         3
+        ],
+        [
+         3,
+         1
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_front",
+       "layer": "limbs_front"
+      }
+     ],
      "scarf": {
-      "lean": 1,
       "trail": 3
-     },
-     "back_arm": {
-      "lean": 0
-     },
-     "front_arm": {
-      "hide": true
-     },
-     "limb": {
-      "shoulder": [
-       22,
-       13
-      ],
-      "hand": [
-       33,
-       13
-      ],
-      "width": 1.2
      }
     },
     {
-     "body": {
-      "lean": 1
+     "torso": {
+      "rot": 10,
+      "dx": 3
      },
+     "hide": [
+      "legs",
+      "front_arm",
+      "back_arm"
+     ],
+     "limbs": [
+      {
+       "from": "hip_back",
+       "rel": [
+        [
+         -2,
+         3
+        ],
+        [
+         -7,
+         0
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_back",
+       "stamp_rot": -25,
+       "layer": "limbs_back",
+       "ground": true
+      },
+      {
+       "from": "hip_front",
+       "rel": [
+        [
+         2,
+         3
+        ],
+        [
+         5,
+         0
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_front",
+       "stamp_rot": 0,
+       "layer": "limbs_back",
+       "ground": true
+      },
+      {
+       "from": "shoulder_back_twist",
+       "rel": [
+        [
+         9,
+         -1
+        ],
+        [
+         17,
+         -1
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_back",
+       "layer": "limbs_back"
+      },
+      {
+       "from": "shoulder_front",
+       "rel": [
+        [
+         1,
+         3
+        ],
+        [
+         3,
+         1
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_front",
+       "layer": "limbs_front"
+      }
+     ],
      "scarf": {
-      "lean": 1,
       "trail": 3
-     },
-     "back_arm": {
-      "lean": 0
-     },
-     "front_arm": {
-      "hide": true
-     },
-     "limb": {
-      "shoulder": [
-       22,
-       13
-      ],
-      "hand": [
-       33,
-       13
-      ],
-      "width": 1.2
      }
     },
     {
-     "body": {
-      "lean": 0
+     "torso": {
+      "rot": 5,
+      "dx": 1
+     },
+     "hide": [
+      "legs",
+      "front_arm",
+      "back_arm"
+     ],
+     "limbs": [
+      {
+       "from": "hip_back",
+       "rel": [
+        [
+         -2,
+         3
+        ],
+        [
+         -7,
+         0
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_back",
+       "stamp_rot": -10,
+       "layer": "limbs_back",
+       "ground": true
+      },
+      {
+       "from": "hip_front",
+       "rel": [
+        [
+         2,
+         3
+        ],
+        [
+         3,
+         0
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_front",
+       "stamp_rot": 0,
+       "layer": "limbs_back",
+       "ground": true
+      },
+      {
+       "from": "shoulder_back_twist",
+       "rel": [
+        [
+         4,
+         3
+        ],
+        [
+         7,
+         1
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_back",
+       "layer": "limbs_back"
+      },
+      {
+       "from": "shoulder_front",
+       "rel": [
+        [
+         1,
+         3
+        ],
+        [
+         3,
+         1
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_front",
+       "layer": "limbs_front"
+      }
+     ],
+     "scarf": {
+      "trail": 2
+     }
+    },
+    {
+     "torso": {
+      "rot": -2,
+      "dx": 0
      },
      "scarf": {
-      "lean": 0,
       "trail": 1
-     },
-     "back_arm": {
-      "lean": 0
-     },
-     "front_arm": {
-      "hide": true
-     },
-     "limb": {
-      "shoulder": [
-       21,
-       13
-      ],
-      "hand": [
-       28,
-       16
-      ],
-      "width": 1.2
-     }
-    },
-    {
-     "body": {
-      "lean": 0
-     },
-     "scarf": {
-      "lean": 0,
-      "trail": 0
-     },
-     "back_arm": {
-      "lean": 0
      }
     }
    ]
@@ -420,219 +706,1129 @@
   "jump": {
    "canvas": [
     40,
-    36
+    44
    ],
    "offset": [
-    1,
+    4,
     7
    ],
    "fps": 10,
    "keyframes": [
     {
-     "body": {
-      "dy": 0
+     "torso": {
+      "rot": 10,
+      "dx": 0,
+      "dy": 3
      },
-     "back_arm": {
-      "dy": 0
-     },
-     "front_arm": {
-      "dy": 0
-     },
+     "hide": [
+      "legs",
+      "front_arm",
+      "back_arm"
+     ],
+     "limbs": [
+      {
+       "from": "hip_back",
+       "rel": [
+        [
+         -4,
+         1
+        ],
+        [
+         -6,
+         0
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_back",
+       "stamp_rot": 0,
+       "layer": "limbs_back",
+       "ground": true
+      },
+      {
+       "from": "hip_front",
+       "rel": [
+        [
+         4,
+         0
+        ],
+        [
+         3,
+         0
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_front",
+       "stamp_rot": 0,
+       "layer": "limbs_back",
+       "ground": true
+      },
+      {
+       "from": "shoulder_front",
+       "rel": [
+        [
+         3,
+         2
+        ],
+        [
+         5,
+         1
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_front",
+       "layer": "limbs_front"
+      },
+      {
+       "from": "shoulder_back",
+       "rel": [
+        [
+         -1,
+         3
+        ],
+        [
+         1,
+         5
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_back",
+       "layer": "limbs_back"
+      }
+     ],
      "scarf": {
-      "dy": 0
+      "trail": 1,
+      "amp": 2.0
      }
     },
     {
-     "body": {
-      "dy": 2
+     "torso": {
+      "rot": 20,
+      "dx": 0,
+      "dy": 4
      },
-     "back_arm": {
-      "dy": 2
-     },
-     "front_arm": {
-      "dy": 2
-     },
+     "hide": [
+      "legs",
+      "front_arm",
+      "back_arm"
+     ],
+     "limbs": [
+      {
+       "from": "hip_back",
+       "rel": [
+        [
+         -4,
+         0
+        ],
+        [
+         -7,
+         0
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_back",
+       "stamp_rot": 0,
+       "layer": "limbs_back",
+       "ground": true
+      },
+      {
+       "from": "hip_front",
+       "rel": [
+        [
+         4,
+         -1
+        ],
+        [
+         3,
+         0
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_front",
+       "stamp_rot": 0,
+       "layer": "limbs_back",
+       "ground": true
+      },
+      {
+       "from": "shoulder_front",
+       "rel": [
+        [
+         -1,
+         3
+        ],
+        [
+         -3,
+         4
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_front",
+       "layer": "limbs_front"
+      },
+      {
+       "from": "shoulder_back",
+       "rel": [
+        [
+         -2,
+         3
+        ],
+        [
+         -5,
+         3
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_back",
+       "layer": "limbs_back"
+      }
+     ],
      "scarf": {
-      "dy": 2
-     },
-     "legs": {
-      "squash": [
-       0.8,
-       1.1
-      ]
+      "trail": 1,
+      "amp": 2.5
      }
     },
     {
-     "body": {
-      "dy": 3
+     "torso": {
+      "rot": 35,
+      "dx": 2,
+      "dy": 1
      },
-     "back_arm": {
-      "dy": 3
-     },
-     "front_arm": {
-      "dy": 3
-     },
+     "hide": [
+      "legs",
+      "front_arm",
+      "back_arm"
+     ],
+     "limbs": [
+      {
+       "from": "hip_back",
+       "rel": [
+        [
+         -3,
+         3
+        ],
+        [
+         -7,
+         0
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_back",
+       "stamp_rot": -30,
+       "layer": "limbs_back",
+       "ground": true
+      },
+      {
+       "from": "hip_front",
+       "rel": [
+        [
+         4,
+         1
+        ],
+        [
+         2,
+         4
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_front",
+       "stamp_rot": 0,
+       "layer": "limbs_back"
+      },
+      {
+       "from": "shoulder_front",
+       "rel": [
+        [
+         3,
+         1
+        ],
+        [
+         7,
+         0
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_front",
+       "layer": "limbs_front"
+      },
+      {
+       "from": "shoulder_back",
+       "rel": [
+        [
+         3,
+         1
+        ],
+        [
+         6,
+         1
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_back",
+       "layer": "limbs_back"
+      }
+     ],
      "scarf": {
-      "dy": 3
-     },
-     "legs": {
-      "squash": [
-       0.7,
-       1.15
-      ]
+      "trail": 2,
+      "amp": 2.0
      }
     },
     {
-     "_all": {
+     "torso": {
+      "rot": 50,
+      "dx": 2,
       "dy": -2
      },
-     "_rot": 12,
+     "hide": [
+      "legs",
+      "front_arm",
+      "back_arm"
+     ],
+     "limbs": [
+      {
+       "from": "hip_back",
+       "rel": [
+        [
+         -3,
+         3
+        ],
+        [
+         -7,
+         5
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_back",
+       "stamp_rot": -50,
+       "layer": "limbs_back"
+      },
+      {
+       "from": "hip_front",
+       "rel": [
+        [
+         4,
+         1
+        ],
+        [
+         1,
+         4
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_front",
+       "stamp_rot": -20,
+       "layer": "limbs_back"
+      },
+      {
+       "from": "shoulder_front",
+       "rel": [
+        [
+         3,
+         1
+        ],
+        [
+         7,
+         -1
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_front",
+       "layer": "limbs_front"
+      },
+      {
+       "from": "shoulder_back",
+       "rel": [
+        [
+         3,
+         1
+        ],
+        [
+         6,
+         0
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_back",
+       "layer": "limbs_back"
+      }
+     ],
      "scarf": {
-      "trail": 1,
+      "trail": 3,
       "amp": 2.5
-     },
-     "legs": {
-      "squash": [
-       1.1,
-       0.9
-      ],
-      "anchor_y": 23
      }
     },
     {
-     "_all": {
+     "torso": {
+      "rot": 55,
+      "dx": 2,
+      "dy": -4
+     },
+     "hide": [
+      "legs",
+      "front_arm",
+      "back_arm"
+     ],
+     "limbs": [
+      {
+       "from": "hip_back",
+       "rel": [
+        [
+         -4,
+         2
+        ],
+        [
+         -8,
+         3
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_back",
+       "stamp_rot": -70,
+       "layer": "limbs_back"
+      },
+      {
+       "from": "hip_front",
+       "rel": [
+        [
+         2,
+         3
+        ],
+        [
+         -2,
+         5
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_front",
+       "stamp_rot": -40,
+       "layer": "limbs_back"
+      },
+      {
+       "from": "shoulder_front",
+       "rel": [
+        [
+         3,
+         1
+        ],
+        [
+         7,
+         -2
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_front",
+       "layer": "limbs_front"
+      },
+      {
+       "from": "shoulder_back",
+       "rel": [
+        [
+         3,
+         1
+        ],
+        [
+         6,
+         -1
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_back",
+       "layer": "limbs_back"
+      }
+     ],
+     "scarf": {
+      "trail": 3,
+      "amp": 2.5
+     }
+    },
+    {
+     "torso": {
+      "rot": 45,
+      "dx": 2,
       "dy": -5
      },
-     "_rot": 22,
+     "hide": [
+      "legs",
+      "front_arm",
+      "back_arm"
+     ],
+     "limbs": [
+      {
+       "from": "hip_back",
+       "rel": [
+        [
+         2,
+         3
+        ],
+        [
+         -1,
+         5
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_back",
+       "stamp_rot": -20,
+       "layer": "limbs_back"
+      },
+      {
+       "from": "hip_front",
+       "rel": [
+        [
+         4,
+         2
+        ],
+        [
+         1,
+         5
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_front",
+       "stamp_rot": -10,
+       "layer": "limbs_back"
+      },
+      {
+       "from": "shoulder_front",
+       "rel": [
+        [
+         3,
+         1
+        ],
+        [
+         7,
+         1
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_front",
+       "layer": "limbs_front"
+      },
+      {
+       "from": "shoulder_back",
+       "rel": [
+        [
+         3,
+         1
+        ],
+        [
+         6,
+         2
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_back",
+       "layer": "limbs_back"
+      }
+     ],
      "scarf": {
-      "trail": 2,
-      "amp": 2.5
-     },
-     "legs": {
-      "squash": [
-       0.8,
-       1.0
-      ],
-      "anchor_y": 23
+      "trail": 3,
+      "amp": 2.0
      }
     },
     {
-     "_all": {
-      "dy": -6
-     },
-     "_rot": 14,
-     "scarf": {
-      "trail": 2,
-      "amp": 2.5
-     },
-     "legs": {
-      "squash": [
-       0.7,
-       1.0
-      ],
-      "anchor_y": 23
-     }
-    },
-    {
-     "_all": {
+     "torso": {
+      "rot": 25,
+      "dx": 2,
       "dy": -5
      },
-     "_rot": 4,
+     "hide": [
+      "legs",
+      "front_arm",
+      "back_arm"
+     ],
+     "limbs": [
+      {
+       "from": "hip_back",
+       "rel": [
+        [
+         3,
+         2
+        ],
+        [
+         1,
+         5
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_back",
+       "stamp_rot": 0,
+       "layer": "limbs_back"
+      },
+      {
+       "from": "hip_front",
+       "rel": [
+        [
+         5,
+         1
+        ],
+        [
+         3,
+         5
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_front",
+       "stamp_rot": 0,
+       "layer": "limbs_back"
+      },
+      {
+       "from": "shoulder_front",
+       "rel": [
+        [
+         3,
+         1
+        ],
+        [
+         7,
+         2
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_front",
+       "layer": "limbs_front"
+      },
+      {
+       "from": "shoulder_back",
+       "rel": [
+        [
+         3,
+         1
+        ],
+        [
+         6,
+         3
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_back",
+       "layer": "limbs_back"
+      }
+     ],
      "scarf": {
       "trail": 2,
-      "amp": 2.5
-     },
-     "legs": {
-      "squash": [
-       0.75,
-       1.0
-      ],
-      "anchor_y": 23
+      "amp": 2.0
      }
     },
     {
-     "_all": {
+     "torso": {
+      "rot": 10,
+      "dx": 2,
       "dy": -3
      },
-     "_rot": -4,
+     "hide": [
+      "legs",
+      "front_arm",
+      "back_arm"
+     ],
+     "limbs": [
+      {
+       "from": "hip_back",
+       "rel": [
+        [
+         0,
+         3
+        ],
+        [
+         -1,
+         6
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_back",
+       "stamp_rot": 0,
+       "layer": "limbs_back"
+      },
+      {
+       "from": "hip_front",
+       "rel": [
+        [
+         3,
+         3
+        ],
+        [
+         3,
+         6
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_front",
+       "stamp_rot": 0,
+       "layer": "limbs_back"
+      },
+      {
+       "from": "shoulder_front",
+       "rel": [
+        [
+         3,
+         2
+        ],
+        [
+         5,
+         3
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_front",
+       "layer": "limbs_front"
+      },
+      {
+       "from": "shoulder_back",
+       "rel": [
+        [
+         2,
+         3
+        ],
+        [
+         4,
+         4
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_back",
+       "layer": "limbs_back"
+      }
+     ],
+     "scarf": {
+      "trail": 2,
+      "amp": 2.0
+     }
+    },
+    {
+     "torso": {
+      "rot": 15,
+      "dx": 2,
+      "dy": 0
+     },
+     "hide": [
+      "legs",
+      "front_arm",
+      "back_arm"
+     ],
+     "limbs": [
+      {
+       "from": "hip_back",
+       "rel": [
+        [
+         -2,
+         2
+        ],
+        [
+         -4,
+         0
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_back",
+       "stamp_rot": 0,
+       "layer": "limbs_back",
+       "ground": true
+      },
+      {
+       "from": "hip_front",
+       "rel": [
+        [
+         3,
+         2
+        ],
+        [
+         4,
+         0
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_front",
+       "stamp_rot": 0,
+       "layer": "limbs_back",
+       "ground": true
+      },
+      {
+       "from": "shoulder_front",
+       "rel": [
+        [
+         3,
+         2
+        ],
+        [
+         5,
+         1
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_front",
+       "layer": "limbs_front"
+      },
+      {
+       "from": "shoulder_back",
+       "rel": [
+        [
+         -1,
+         3
+        ],
+        [
+         1,
+         5
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_back",
+       "layer": "limbs_back"
+      }
+     ],
+     "scarf": {
+      "trail": 1,
+      "amp": 2.0
+     }
+    },
+    {
+     "torso": {
+      "rot": 22,
+      "dx": 1,
+      "dy": 4
+     },
+     "hide": [
+      "legs",
+      "front_arm",
+      "back_arm"
+     ],
+     "limbs": [
+      {
+       "from": "hip_back",
+       "rel": [
+        [
+         -4,
+         0
+        ],
+        [
+         -6,
+         0
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_back",
+       "stamp_rot": 0,
+       "layer": "limbs_back",
+       "ground": true
+      },
+      {
+       "from": "hip_front",
+       "rel": [
+        [
+         4,
+         -1
+        ],
+        [
+         3,
+         0
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_front",
+       "stamp_rot": 0,
+       "layer": "limbs_back",
+       "ground": true
+      },
+      {
+       "from": "shoulder_front",
+       "rel": [
+        [
+         3,
+         2
+        ],
+        [
+         5,
+         3
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_front",
+       "layer": "limbs_front"
+      },
+      {
+       "from": "shoulder_back",
+       "rel": [
+        [
+         1,
+         3
+        ],
+        [
+         3,
+         4
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_back",
+       "layer": "limbs_back"
+      }
+     ],
      "scarf": {
       "trail": 1,
       "amp": 2.5
-     },
-     "legs": {
-      "squash": [
-       1.0,
-       1.0
-      ],
-      "anchor_y": 23
      }
     },
     {
-     "_all": {
-      "dy": -1
+     "torso": {
+      "rot": 15,
+      "dx": 0,
+      "dy": 4
      },
-     "_rot": -2,
+     "hide": [
+      "legs",
+      "front_arm",
+      "back_arm"
+     ],
+     "limbs": [
+      {
+       "from": "hip_back",
+       "rel": [
+        [
+         -4,
+         0
+        ],
+        [
+         -6,
+         0
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_back",
+       "stamp_rot": 0,
+       "layer": "limbs_back",
+       "ground": true
+      },
+      {
+       "from": "hip_front",
+       "rel": [
+        [
+         4,
+         -1
+        ],
+        [
+         3,
+         0
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_front",
+       "stamp_rot": 0,
+       "layer": "limbs_back",
+       "ground": true
+      },
+      {
+       "from": "shoulder_front",
+       "rel": [
+        [
+         3,
+         2
+        ],
+        [
+         5,
+         1
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_front",
+       "layer": "limbs_front"
+      },
+      {
+       "from": "shoulder_back",
+       "rel": [
+        [
+         -1,
+         3
+        ],
+        [
+         1,
+         5
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_back",
+       "layer": "limbs_back"
+      }
+     ],
      "scarf": {
-      "trail": 0,
-      "amp": 2.5
+      "trail": 1,
+      "amp": 2.0
      }
     },
     {
-     "body": {
+     "torso": {
+      "rot": 12,
+      "dx": 0,
       "dy": 3
      },
-     "back_arm": {
-      "dy": 3
-     },
-     "front_arm": {
-      "dy": 3
-     },
+     "hide": [
+      "legs",
+      "front_arm",
+      "back_arm"
+     ],
+     "limbs": [
+      {
+       "from": "hip_back",
+       "rel": [
+        [
+         -4,
+         1
+        ],
+        [
+         -6,
+         0
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_back",
+       "stamp_rot": 0,
+       "layer": "limbs_back",
+       "ground": true
+      },
+      {
+       "from": "hip_front",
+       "rel": [
+        [
+         4,
+         0
+        ],
+        [
+         3,
+         0
+        ]
+       ],
+       "width": 1.9,
+       "stamp": "shoe_front",
+       "stamp_rot": 0,
+       "layer": "limbs_back",
+       "ground": true
+      },
+      {
+       "from": "shoulder_front",
+       "rel": [
+        [
+         3,
+         2
+        ],
+        [
+         5,
+         1
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_front",
+       "layer": "limbs_front"
+      },
+      {
+       "from": "shoulder_back",
+       "rel": [
+        [
+         -1,
+         3
+        ],
+        [
+         1,
+         5
+        ]
+       ],
+       "width": 1.35,
+       "stamp": "fist_back",
+       "layer": "limbs_back"
+      }
+     ],
      "scarf": {
-      "dy": 3
-     },
-     "legs": {
-      "squash": [
-       0.7,
-       1.15
-      ]
-     }
-    },
-    {
-     "body": {
-      "dy": 2
-     },
-     "back_arm": {
-      "dy": 2
-     },
-     "front_arm": {
-      "dy": 2
-     },
-     "scarf": {
-      "dy": 2
-     },
-     "legs": {
-      "squash": [
-       0.8,
-       1.1
-      ]
-     }
-    },
-    {
-     "body": {
-      "dy": 0
-     },
-     "back_arm": {
-      "dy": 0
-     },
-     "front_arm": {
-      "dy": 0
-     },
-     "scarf": {
-      "dy": 0
+      "trail": 1,
+      "amp": 2.0
      }
     }
    ]
   }
  },
- "waist_y": 21
+ "waist_y": 21,
+ "torso_group": [
+  "body",
+  "front_arm",
+  "back_arm"
+ ],
+ "follow": {
+  "scarf": [
+   "neck",
+   0
+  ],
+  "head": [
+   "neck",
+   0.35
+  ]
+ },
+ "anchors": {
+  "neck": [
+   16,
+   9
+  ],
+  "hip_back": [
+   14,
+   22
+  ],
+  "hip_front": [
+   22,
+   21
+  ],
+  "shoulder_front": [
+   22,
+   15
+  ],
+  "shoulder_back": [
+   11,
+   14
+  ],
+  "shoulder_back_twist": [
+   16,
+   13
+  ]
+ },
+ "ankle_floor_y": 27,
+ "stamps": {
+  "shoe_back": {
+   "rect": [
+    6,
+    27,
+    12,
+    32
+   ],
+   "anchor": [
+    10,
+    27
+   ]
+  },
+  "shoe_front": {
+   "rect": [
+    20,
+    27,
+    29,
+    32
+   ],
+   "anchor": [
+    24,
+    27
+   ]
+  },
+  "fist_front": {
+   "rect": [
+    25,
+    17,
+    29,
+    21
+   ],
+   "anchor": [
+    27,
+    19
+   ]
+  },
+  "fist_back": {
+   "rect": [
+    7,
+    18,
+    11,
+    21
+   ],
+   "anchor": [
+    9,
+    19
+   ]
+  }
+ }
 }
