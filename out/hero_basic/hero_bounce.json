@@ -1,0 +1,9 @@
+{
+  "animation": "bounce",
+  "frame_width": 29,
+  "frame_height": 45,
+  "frames": 8,
+  "fps": 8,
+  "sheet": "hero_bounce_sheet.png",
+  "layout": "horizontal"
+}

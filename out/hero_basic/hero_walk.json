@@ -1,0 +1,9 @@
+{
+  "animation": "walk",
+  "frame_width": 27,
+  "frame_height": 37,
+  "frames": 8,
+  "fps": 8,
+  "sheet": "hero_walk_sheet.png",
+  "layout": "horizontal"
+}

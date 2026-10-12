@@ -1,0 +1,19 @@
+{
+  "animation": "sword_slash",
+  "frame_width": 60,
+  "frame_height": 54,
+  "frames": 9,
+  "durations_ms": [
+    160,
+    90,
+    90,
+    220,
+    50,
+    50,
+    90,
+    140,
+    160
+  ],
+  "layout": "horizontal",
+  "sheet": "hero_slash_sheet.png"
+}

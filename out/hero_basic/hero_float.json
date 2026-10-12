@@ -1,0 +1,9 @@
+{
+  "animation": "float",
+  "frame_width": 27,
+  "frame_height": 40,
+  "frames": 8,
+  "fps": 8,
+  "sheet": "hero_float_sheet.png",
+  "layout": "horizontal"
+}

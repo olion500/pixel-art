@@ -1,0 +1,9 @@
+{
+  "animation": "hit",
+  "frame_width": 33,
+  "frame_height": 36,
+  "frames": 8,
+  "fps": 8,
+  "sheet": "hero_hit_sheet.png",
+  "layout": "horizontal"
+}

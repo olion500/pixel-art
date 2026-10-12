@@ -1,0 +1,9 @@
+{
+  "animation": "sway",
+  "frame_width": 27,
+  "frame_height": 36,
+  "frames": 8,
+  "fps": 8,
+  "sheet": "hero_sway_sheet.png",
+  "layout": "horizontal"
+}
