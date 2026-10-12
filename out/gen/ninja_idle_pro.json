@@ -1,0 +1,8 @@
+{
+  "frame_width": 46,
+  "frame_height": 52,
+  "frames": 8,
+  "fps": 10,
+  "model": "gemini-3-pro-image",
+  "motion": "x"
+}

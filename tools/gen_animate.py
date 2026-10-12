@@ -53,12 +53,25 @@ def load_sprite(path):
     return a
 
 
+ASPECTS = {"1:1": 1, "3:2": 1.5, "2:3": 2 / 3, "4:3": 4 / 3, "3:4": 0.75, "5:4": 1.25, "4:5": 0.8,
+           "16:9": 16 / 9, "9:16": 9 / 16, "21:9": 21 / 9, "4:1": 4, "1:4": 0.25}
+
+
+def cell_size(base, cols, rows):
+    """Frame size (w, h) in sprite px, with h stretched so the sheet hits an aspect ratio the API accepts."""
+    name = min(ASPECTS, key=lambda k: abs(ASPECTS[k] - cols / rows))
+    ch = max(base, round(cols * base / (ASPECTS[name] * rows)))
+    cw = max(base, round(ASPECTS[name] * rows * ch / cols))
+    return (cw, ch), name
+
+
 def make_template(sprite, cols, rows, cell, scale):
-    """cell = frame size in sprite pixels; the sprite sits bottom-centered in cell 0."""
-    W, H = cols * cell * scale, rows * cell * scale
+    """cell = (w, h) frame size in sprite pixels; the sprite sits bottom-centered in cell 0."""
+    cw, ch = cell
+    W, H = cols * cw * scale, rows * ch * scale
     sheet = Image.new("RGB", (W, H), KEY_RGB)
     h, w = sprite.shape[:2]
-    x0, y0 = (cell - w) // 2, cell - h - 2
+    x0, y0 = (cw - w) // 2, ch - h - 2
     big = Image.fromarray(sprite).resize((w * scale, h * scale), Image.NEAREST)
     sheet.paste(big, (x0 * scale, y0 * scale), big)
     return sheet, (x0, y0)
@@ -155,25 +168,73 @@ def ground_align(frame, ground_y):
     return out
 
 
+def erase_grid_lines(gen, frac=0.9):
+    """Models often draw cell borders even when told not to: long dark rows/columns -> key color."""
+    a = np.asarray(gen).copy()
+    dark = a.astype(int).sum(-1) < 200
+    for axis in (0, 1):
+        lines = np.nonzero(dark.mean(axis=1 - axis) > frac)[0]
+        for i in lines:
+            sl = slice(max(0, i - 1), i + 2)
+            if axis == 0:
+                a[sl, :] = KEY_RGB
+            else:
+                a[:, sl] = KEY_RGB
+    return Image.fromarray(a)
+
+
 def postprocess(gen, sprite, cols, rows, cell, n, origin, palette, align_ground=True):
-    W, H = cols * cell, rows * cell
-    frames = []
-    cw, ch = gen.width / cols, gen.height / rows
+    """Cut cells, then rebuild each frame on the native pixel grid.
+
+    Models tend to redraw the whole sheet at a slightly different scale (frame 1 included),
+    so the art-pixel size is calibrated on the model's own redraw of frame 1: its height in
+    output pixels divided by the source sprite height. Every cell is then downsampled with
+    that step, its grid phase anchored on the character's bounding box (outlines sit on pixel
+    borders), and placed so the model's frame 1 lands exactly where the source sits.
+    """
+    gen = erase_grid_lines(gen)
+    cw, ch = cell
+    gw, gh = gen.width / cols, gen.height / rows
+    cells = []
     for k in range(n):
         r, c = divmod(k, cols)
-        crop = gen.crop((round(c * cw), round(r * ch), round((c + 1) * cw), round((r + 1) * ch)))
-        f = majority_downscale(key_out(crop), cell, cell)
-        f = drop_specks(fill_seams(snap(f, palette)), 6)
-        frames.append(f)
-    # frame 0 = source, untouched (first-frame lock)
-    x0, y0 = origin
-    h, w = sprite.shape[:2]
-    f0 = np.zeros((cell, cell, 4), np.uint8)
-    f0[y0:y0 + h, x0:x0 + w] = snap(sprite, palette)
-    ground = y0 + h - 1
+        crop = gen.crop((round(c * gw), round(r * gh), round((c + 1) * gw), round((r + 1) * gh)))
+        rgba = key_out(crop)
+        rgba = drop_specks(rgba, 40)  # stray key-color noise in output resolution
+        cells.append(rgba)
+
+    def bbox(a):
+        ys, xs = np.nonzero(a[..., 3])
+        return (xs.min(), ys.min(), xs.max() + 1, ys.max() + 1) if len(ys) else None
+
+    sh, sw = sprite.shape[:2]
+    b0 = bbox(cells[0])
+    step = (b0[3] - b0[1]) / sh
+    ox, oy = origin
+    # where the model's frame 1 sits, in native px, vs where the source sits
+    corr_x = ox - round(b0[0] / step)
+    corr_y = oy - round(b0[1] / step)
+
+    frames = []
+    for rgba in cells:
+        f = np.zeros((ch, cw, 4), np.uint8)
+        b = bbox(rgba)
+        if b:
+            x0, y0, x1, y1 = b
+            ow, oh = max(1, round((x1 - x0) / step)), max(1, round((y1 - y0) / step))
+            small = majority_downscale(rgba[y0:y1, x0:x1], ow, oh)
+            px, py = round(x0 / step) + corr_x, round(y0 / step) + corr_y
+            ys = slice(max(0, py), min(ch, py + oh))
+            xs = slice(max(0, px), min(cw, px + ow))
+            f[ys, xs] = small[ys.start - py:ys.stop - py, xs.start - px:xs.stop - px]
+        frames.append(drop_specks(fill_seams(snap(f, palette)), 6))
+
+    f0 = np.zeros((ch, cw, 4), np.uint8)
+    f0[oy:oy + sh, ox:ox + sw] = snap(sprite, palette)
     if align_ground:
-        frames = [ground_align(f, ground) for f in frames]
-    frames[0] = f0
+        frames = [ground_align(f, oy + sh - 1) for f in frames]
+    frames[0] = f0  # first-frame lock
+    print(f"art pixel = {step:.2f} output px (template used {gen.width / (cols * cw):.2f})")
     return frames
 
 
@@ -195,8 +256,8 @@ def main():
 
     sprite = load_sprite(a.image)
     h, w = sprite.shape[:2]
-    cell = a.cell or int(max(h, w) * 1.4)
     rows = -(-a.frames // a.cols)
+    cell, aspect = cell_size(a.cell or int(max(h, w) * 1.4), a.cols, rows)
     template, origin = make_template(sprite, a.cols, rows, cell, a.scale)
     out = Path(a.out)
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -205,7 +266,6 @@ def main():
     if a.reuse:
         gen = Image.open(a.reuse).convert("RGB")
     else:
-        aspect = {(4, 2): "2:1", (4, 3): "4:3", (4, 4): "1:1", (2, 2): "1:1", (2, 1): "2:1"}.get((a.cols, rows), "4:3")
         prompt = build_prompt(a.motion, a.frames, a.cols, rows, a.scale, a.describe)
         t = time.time()
         gen = call_gemini(a.model, prompt, template, api_key(), aspect)
@@ -219,14 +279,14 @@ def main():
     Image.fromarray(np.concatenate(frames, 1)).save(f"{out}_sheet.png")
     big = []
     for f in frames:
-        im = Image.new("RGBA", (cell, cell), (232, 234, 240, 255))
+        im = Image.new("RGBA", cell, (232, 234, 240, 255))
         fi = Image.fromarray(f)
         im.paste(fi, (0, 0), fi)
-        big.append(im.convert("RGB").resize((cell * 6, cell * 6), Image.NEAREST))
+        big.append(im.convert("RGB").resize((cell[0] * 6, cell[1] * 6), Image.NEAREST))
     big[0].save(f"{out}.gif", save_all=True, append_images=big[1:], duration=100, loop=0)
-    Path(f"{out}.json").write_text(json.dumps({"frame_width": cell, "frame_height": cell, "frames": len(frames),
+    Path(f"{out}.json").write_text(json.dumps({"frame_width": cell[0], "frame_height": cell[1], "frames": len(frames),
                                                "fps": 10, "model": a.model, "motion": a.motion}, indent=2))
-    print(f"{len(frames)} frames {cell}x{cell} -> {out}_sheet.png")
+    print(f"{len(frames)} frames {cell[0]}x{cell[1]} ({aspect}) -> {out}_sheet.png")
 
 
 if __name__ == "__main__":
