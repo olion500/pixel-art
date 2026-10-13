@@ -1,0 +1,8 @@
+{
+  "frame_width": 52,
+  "frame_height": 52,
+  "frames": 8,
+  "fps": 10,
+  "model": "veo-3.1-fast-generate-preview",
+  "clip_seconds": 4.0
+}

@@ -78,13 +78,14 @@ def make_template(sprite, cols, rows, cell, scale):
 
 
 def call_gemini(model, prompt, image, key, aspect):
-    buf = io.BytesIO()
-    image.save(buf, "PNG")
+    """image: one PIL image or a list of them (sent in order, before the prompt)."""
+    parts = []
+    for im in image if isinstance(image, (list, tuple)) else [image]:
+        buf = io.BytesIO()
+        im.save(buf, "PNG")
+        parts.append({"inline_data": {"mime_type": "image/png", "data": base64.b64encode(buf.getvalue()).decode()}})
     body = {
-        "contents": [{"parts": [
-            {"inline_data": {"mime_type": "image/png", "data": base64.b64encode(buf.getvalue()).decode()}},
-            {"text": prompt},
-        ]}],
+        "contents": [{"parts": parts + [{"text": prompt}]}],
         "generationConfig": {"responseModalities": ["IMAGE"], "imageConfig": {"aspectRatio": aspect}},
     }
     req = urllib.request.Request(API.format(model=model), data=json.dumps(body).encode(),

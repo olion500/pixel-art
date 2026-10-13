@@ -1,0 +1,9 @@
+{
+  "frame_width": 44,
+  "frame_height": 44,
+  "frames": 12,
+  "fps": 10,
+  "model": "gemini-3-pro-image",
+  "motion": "long jump (crouch, leap forward, tuck, land in a crouch)",
+  "guide": "out/ninja/ours_jump_sheet.png"
+}
