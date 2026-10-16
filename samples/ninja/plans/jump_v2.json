@@ -29,35 +29,65 @@
     },
     {
       "ms": 60,
-      "pose": "push: legs extending, the body rising, arms swinging forward, back toe still on the ground"
+      "pose": "push: legs extending, the body rising, arms swinging forward, back toe still on the ground",
+      "shift": [
+        1,
+        -1
+      ]
     },
     {
       "ms": 60,
       "pose": "take-off: the whole body one straight diagonal line from the back toe (still touching the ground) to the fingertips reaching forward-up; stretched",
+      "shift": [
+        2,
+        -2
+      ],
       "fx": "dust0"
     },
     {
       "ms": 100,
       "pose": "apex: in the air 10 pixels above the standing height, knees tucked up toward the chest, arms forward; scarf trailing back and down",
+      "shift": [
+        6,
+        -7
+      ],
+      "navy_shins": true,
       "fx": "dust1"
     },
     {
       "ms": 60,
-      "pose": "descent: in the air 6 pixels up, both arms raised up for balance, legs reaching forward and down, head level; scarf streaming upward"
+      "pose": "descent: in the air 6 pixels up, both arms raised up for balance, legs reaching forward and down, head level; scarf streaming upward",
+      "shift": [
+        9,
+        -3
+      ]
     },
     {
       "ms": 140,
-      "pose": "landing crouch: feet on the ground line, head 9 pixels lower than standing, knees bent about 90 degrees, arms forward and down; scarf still up"
-    },
-    {
-      "ms": 120,
-      "pose": "rise: coming up, head 4 pixels lower than standing, arms lowering; scarf falling",
+      "pose": "landing crouch: feet on the ground line, head 9 pixels lower than standing, knees bent about 90 degrees, arms forward and down; scarf still up",
+      "shift": [
+        12,
+        0
+      ],
       "fx": "dust0"
     },
     {
       "ms": 120,
-      "pose": "stand: the standing pose of cell 2; scarf settling",
+      "pose": "rise: coming up, head 4 pixels lower than standing, arms lowering; scarf falling",
+      "shift": [
+        11,
+        0
+      ],
       "fx": "dust1"
+    },
+    {
+      "ms": 120,
+      "pose": "stand: the standing pose of cell 2; scarf settling",
+      "copy": 1,
+      "shift": [
+        12,
+        0
+      ]
     }
   ]
 }

@@ -39,17 +39,19 @@ def to_grid(img, legend_of):
     return rows
 
 
-def dust(layer, x, y, stage, color_w, color_s):
+DUST_L, DUST_D = (184, 184, 200, 255), (128, 128, 146, 255)
+
+
+def dust(layer, x, y, stage, *_):
+    """Flattened grey puffs spreading outward from the feet (rule 43.11), not shoe-coloured blocks."""
+    puffs = {0: [(3, 0, 1)], 1: [(5, -1, 2), (8, 0, 1)], 2: [(9, -1, 1), (11, 0, 0)]}[stage]
     for s in (-1, 1):
-        if stage == 0:
-            for dx, dy in [(2, -1), (3, -1), (2, 0), (3, 0)]:
-                fx.put(layer, x + s * dx, y + dy, color_w)
-        elif stage == 1:
-            for dx, dy in [(4, -2), (5, -2), (4, -1), (5, -1), (6, -1), (3, 0), (4, 0), (5, 0), (6, 0)]:
-                fx.put(layer, x + s * dx, y + dy, color_w if dy < 0 else color_s)
-        elif stage == 2:
-            for dx, dy in [(7, -2), (8, 0)]:
-                fx.put(layer, x + s * dx, y + dy, color_s)
+        for dx, dy, r in puffs:
+            cx, cy = x + s * dx, y + dy
+            for yy in range(cy - r, cy + 1):
+                for xx in range(cx - r - 1, cx + r + 2):
+                    if (xx - cx) ** 2 / (r + 1.5) ** 2 + (yy - cy) ** 2 / (r + 0.5) ** 2 <= 1:
+                        fx.put(layer, xx, yy, DUST_L if yy < cy else DUST_D)
 
 
 def main():
@@ -60,7 +62,10 @@ def main():
     ap.add_argument("--base", default="samples/ninja/ninja-base.png")
     ap.add_argument("--waist", type=int, default=0, help="frame row splitting upper/legs layers (0 = single body layer)")
     ap.add_argument("--head-err", type=int, default=120)
-    ap.add_argument("--pad", type=int, default=8)
+    ap.add_argument("--pad", type=int, default=8, help="extra px on the right (sparks, forward travel)")
+    ap.add_argument("--top-pad", type=int, default=0, help="extra px on top (jump apex)")
+    ap.add_argument("--align-front-shoe", action="store_true",
+                    help="translate every frame so the front shoe matches frame 1 (ground pivot, rule 43.6)")
     ap.add_argument("--save", required=True, help="output prefix for .aseprite/.png/.gif written by Aseprite")
     ap.add_argument("-o", "--out", required=True)
     a = ap.parse_args()
@@ -69,34 +74,84 @@ def main():
     meta = json.loads(Path(a.storyboard + ".json").read_text())
     fw, fh = meta["frame_width"], meta["frame_height"]
     sheet = np.asarray(Image.open(a.storyboard + "_sheet.png").convert("RGBA"))
-    frames = [np.pad(sheet[:, i * fw:(i + 1) * fw], ((0, 0), (0, a.pad), (0, 0))) for i in range(sheet.shape[1] // fw)]
+    frames = [np.pad(sheet[:, i * fw:(i + 1) * fw], ((a.top_pad, 0), (0, a.pad), (0, 0))) for i in range(sheet.shape[1] // fw)]
     W = fw + a.pad
+    fh += a.top_pad
     specs = plan["frames"][1:] if plan.get("reference_cell") else plan["frames"]
-    durations = meta["durations_ms"]
+    durations = [f["ms"] for f in specs]
 
     base = np.asarray(Image.open(a.base).convert("RGBA")).copy()
     base[..., 3] = np.where(base[..., 3] > 127, 255, 0)
     pal = kmeans_palette(base, 16)
     frames, report = lock_heads(frames, snap(base, pal), HEAD, ((fw - 33) // 2, fh - 35), a.head_err)
 
+    def shift(img, dx, dy):
+        out = np.zeros_like(img)
+        h, w = img.shape[:2]
+        ys, yd = (slice(0, h - dy), slice(dy, h)) if dy >= 0 else (slice(-dy, h), slice(0, h + dy))
+        xs, xd = (slice(0, w - dx), slice(dx, w)) if dx >= 0 else (slice(-dx, w), slice(0, w + dx))
+        out[yd, xd] = img[ys, xs]
+        return out
+
+    def front_shoe_right(img):
+        al = img[..., 3] > 0
+        shoe = al & (img[..., 0] > 110) & (img[..., 1] > 150) & (img[..., 2] > 160)
+        shoe[:img.shape[0] - 12] = False
+        xs = np.nonzero(shoe.any(0))[0]
+        return int(xs.max()) if len(xs) else None
+
+    if a.align_front_shoe:
+        ref = front_shoe_right(frames[0])
+        frames = [shift(f, ref - front_shoe_right(f), 0) if front_shoe_right(f) else f for f in frames]
+    # per-frame grid-loop edits from the plan: copy another frame's drawing, recolor tucked shins, translate
+    src = [f.copy() for f in frames]
+    for i, spec in enumerate(specs):
+        f = src[spec["copy"] - 1].copy() if "copy" in spec else frames[i]
+        if spec.get("navy_shins"):                       # white stockings -> navy legs, keep the lowest 3 rows (boots)
+            al = np.nonzero(f[..., 3].any(1))[0]
+            bottom = al.max()
+            light = (f[..., 3] > 0) & (f[..., :3].astype(int).sum(-1) > 450)
+            light[bottom - 2:] = False
+            light[:bottom - 9] = False
+            f[light] = (39, 57, 97, 255)
+        if "shift" in spec:
+            f = shift(f, *spec["shift"])
+        frames[i] = f
+
     # body edits (smear / flash) and the fx layer, from the plan's "fx" tags
     fx_layers, tip = [], None
+    frames_index = lambda img: next(k for k, g in enumerate(frames) if g is img)
     for f, spec in zip(frames, specs):
         layer = np.zeros_like(f)
         kind = spec.get("fx")
         if kind in ("smear", "smear2", "impact"):
             tip = fx.fist_tip(f)
-        if kind == "smear":
-            fx.smear(f, tip)
-        elif kind == "smear2":                          # thinner second smear: 1px streak behind the arm
-            x1, y = tip
-            for x in range(x1 - 12, x1 - 5):
-                if f[y + 1, x, 3] == 0:
-                    f[y + 1, x] = fx.H
+        if kind in ("smear", "smear2"):
+            # rule 44.5: opaque streak in the arm's two brightest colours, from where the fist was (chin)
+            # to where it will be (next frame's reach); the first smear is the widest, the second a thin trail
+            nxt = fx.fist_tip(frames[min(len(frames) - 1, frames_index(f) + 1)])
+            x0, y0 = tip[0] - 5, tip[1]
+            x1, y1 = max(nxt[0], tip[0]), nxt[1]
+            if kind == "smear":
+                x1 = x0 + round(0.6 * (x1 - x0))
+            half = 1 if kind == "smear" else 0
+            for x in range(x0, x1 + 1):
+                t = (x - x0) / max(1, x1 - x0)
+                yc = round(y0 + (y1 - y0) * t)
+                for yy in range(yc - half, yc + half + 1):
+                    if 0 <= yy < f.shape[0] and 0 <= x < f.shape[1]:
+                        f[yy, x] = (59, 141, 172, 255) if yy < yc or (half == 0) else (39, 57, 97, 255)
+            if kind == "smear":
+                for x in range(x1 - 3, x1 + 1):         # leading edge = fist at full reach, outlined
+                    for yy in (y1 - 2, y1 + 2):
+                        if 0 <= yy < f.shape[0]:
+                            f[yy, x] = (3, 1, 4, 255)
         elif kind == "impact":
             fx.flash(f, tip)
             fx.spark(layer, tip[0] + 3, tip[1], 0)
-            fx.speed_lines(layer, f, tip[0] - 14, tip[0] - 3, [tip[1] - 4, tip[1] + 4])
+            col = np.nonzero(f[:, tip[0] - 4, 3])[0]
+            arm = [y for y in col if abs(y - tip[1]) <= 4]
+            fx.speed_lines(layer, f, tip[0] - 14, tip[0] - 3, [min(arm) - 1, max(arm) + 1])
         elif kind == "spark1":
             fx.spark(layer, tip[0] + 3, tip[1], 1)
         elif kind == "spark2":
@@ -106,7 +161,9 @@ def main():
         elif kind and kind.startswith("dust"):
             ys = np.nonzero(f[..., 3].any(1))[0]
             xs = np.nonzero(f[..., 3].any(0))[0]
-            dust(layer, int(xs.mean()), fh - 3, int(kind[-1]), fx.W, (140, 187, 203, 255))
+            ground = int(np.nonzero(frames[0][..., 3].any(1))[0].max())   # the ground line, not the airborne feet
+            dust(layer, int(xs.mean()), ground, int(kind[-1]))
+            layer[f[..., 3] > 0] = 0
         fx_layers.append(layer)
 
     # palette + legend shared by every grid
@@ -139,12 +196,17 @@ def main():
             calls.append({"tool": "draw", "label": f"{lname}_f{i + 1}", "args": {
                 "layer": lname, "frame": i + 1,
                 "ops": [{"kind": "grid", "x": 0, "y": 0, "legend": legend, "rows": to_grid(img, legend_of)}]}})
+    for i, spec in enumerate(specs):
+        if spec.get("upper_dx") and a.waist:
+            calls.append({"tool": "cel", "args": {"op": "move", "layer": "upper", "frame": i + 1, "dx": spec["upper_dx"], "dy": 0}})
     for i, (src, dx) in moved.items():
         calls += [
             {"tool": "cel", "args": {"op": "copy", "layer": "upper", "frame": src, "toFrame": i + 1}},
             {"tool": "cel", "args": {"op": "move", "layer": "upper", "frame": i + 1, "dx": dx, "dy": 0}},
             {"tool": "cel", "args": {"op": "copy", "layer": "legs", "frame": src, "toFrame": i + 1}},
         ]
+    if plan.get("link_legs") and a.waist:      # rule 43.6: one leg cel shared by every frame = feet never move
+        calls.append({"tool": "cel", "args": {"op": "link", "layer": "legs", "frame": 1, "frames": list(range(1, n + 1))}})
     for i, layer in enumerate(fx_layers):
         if layer[..., 3].any():
             calls.append({"tool": "draw", "label": f"fx_f{i + 1}", "args": {
