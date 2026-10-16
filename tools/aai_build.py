@@ -61,6 +61,7 @@ def main():
     ap.add_argument("storyboard", help="prefix of plan_animate output")
     ap.add_argument("--base", default="samples/ninja/ninja-base.png")
     ap.add_argument("--waist", type=int, default=0, help="frame row splitting upper/legs layers (0 = single body layer)")
+    ap.add_argument("--hips", type=int, default=0, help="rows above the waist kept on their own unshifted 'hips' layer")
     ap.add_argument("--head-err", type=int, default=120)
     ap.add_argument("--pad", type=int, default=8, help="extra px on the right (sparks, forward travel)")
     ap.add_argument("--top-pad", type=int, default=0, help="extra px on top (jump apex)")
@@ -103,6 +104,10 @@ def main():
     if a.align_front_shoe:
         ref = front_shoe_right(frames[0])
         frames = [shift(f, ref - front_shoe_right(f), 0) if front_shoe_right(f) else f for f in frames]
+    def pin(frames_, i, j):
+        r, q = front_shoe_right(frames_[j]), front_shoe_right(frames_[i])
+        return shift(frames_[i], r - q, 0) if r is not None and q is not None else frames_[i]
+
     # per-frame grid-loop edits from the plan: copy another frame's drawing, recolor tucked shins, translate
     src = [f.copy() for f in frames]
     for i, spec in enumerate(specs):
@@ -117,6 +122,9 @@ def main():
         if "shift" in spec:
             f = shift(f, *spec["shift"])
         frames[i] = f
+    for i, spec in enumerate(specs):
+        if "pin_to" in spec:
+            frames[i] = pin(frames, i, spec["pin_to"] - 1)
 
     # body edits (smear / flash) and the fx layer, from the plan's "fx" tags
     fx_layers, tip = [], None
@@ -172,7 +180,7 @@ def main():
     legend_of = {c: glyphs[i] for i, c in enumerate(colors)}
     legend = {g: c for c, g in legend_of.items()}
 
-    layers = ["legs", "upper", "fx"] if a.waist else ["body", "fx"]
+    layers = (["legs", "hips", "upper", "fx"] if a.hips else ["legs", "upper", "fx"]) if a.waist else ["body", "fx"]
     n = len(frames)
     calls = [
         {"tool": "preflight"},
@@ -190,8 +198,12 @@ def main():
             _, src, dx = cel.split(":")
             moved[i] = (int(src), int(dx))
             continue
-        parts = {"body": f} if not a.waist else {"upper": np.where((np.arange(fh) < a.waist)[:, None, None], f, 0),
-                                                 "legs": np.where((np.arange(fh) >= a.waist)[:, None, None], f, 0)}
+        rows_ = np.arange(fh)[:, None, None]
+        top = a.waist - a.hips
+        parts = {"body": f} if not a.waist else {"upper": np.where(rows_ < top, f, 0),
+                                                 "legs": np.where(rows_ >= a.waist, f, 0)}
+        if a.waist and a.hips:
+            parts["hips"] = np.where((rows_ >= top) & (rows_ < a.waist), f, 0)
         for lname, img in parts.items():
             calls.append({"tool": "draw", "label": f"{lname}_f{i + 1}", "args": {
                 "layer": lname, "frame": i + 1,
@@ -204,7 +216,7 @@ def main():
             {"tool": "cel", "args": {"op": "copy", "layer": "upper", "frame": src, "toFrame": i + 1}},
             {"tool": "cel", "args": {"op": "move", "layer": "upper", "frame": i + 1, "dx": dx, "dy": 0}},
             {"tool": "cel", "args": {"op": "copy", "layer": "legs", "frame": src, "toFrame": i + 1}},
-        ]
+        ] + ([{"tool": "cel", "args": {"op": "copy", "layer": "hips", "frame": src, "toFrame": i + 1}}] if a.hips else [])
     if plan.get("link_legs") and a.waist:      # rule 43.6: one leg cel shared by every frame = feet never move
         calls.append({"tool": "cel", "args": {"op": "link", "layer": "legs", "frame": 1, "frames": list(range(1, n + 1))}})
     for i, layer in enumerate(fx_layers):

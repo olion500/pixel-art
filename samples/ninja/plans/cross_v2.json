@@ -33,7 +33,7 @@
       "ms": 50,
       "pose": "rear arm reaching full extension forward at visor height",
       "fx": "smear2",
-      "upper_dx": 2
+      "upper_dx": 1
     },
     {
       "ms": 100,
