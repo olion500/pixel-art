@@ -45,8 +45,8 @@
   "tool": "layer",
   "args": {
    "op": "rename",
-   "layer": "Layer 1",
-   "name": "legs"
+   "name": "Layer 1",
+   "newName": "legs"
   }
  },
  {

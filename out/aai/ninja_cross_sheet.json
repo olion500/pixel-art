@@ -1,0 +1,102 @@
+{ "frames": [
+   {
+    "filename": "Sprite 0.",
+    "frame": { "x": 0, "y": 0, "w": 54, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 49 },
+    "sourceSize": { "w": 54, "h": 49 },
+    "duration": 100
+   },
+   {
+    "filename": "Sprite 1.",
+    "frame": { "x": 54, "y": 0, "w": 54, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 49 },
+    "sourceSize": { "w": 54, "h": 49 },
+    "duration": 50
+   },
+   {
+    "filename": "Sprite 2.",
+    "frame": { "x": 108, "y": 0, "w": 54, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 49 },
+    "sourceSize": { "w": 54, "h": 49 },
+    "duration": 50
+   },
+   {
+    "filename": "Sprite 3.",
+    "frame": { "x": 162, "y": 0, "w": 54, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 49 },
+    "sourceSize": { "w": 54, "h": 49 },
+    "duration": 50
+   },
+   {
+    "filename": "Sprite 4.",
+    "frame": { "x": 216, "y": 0, "w": 54, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 49 },
+    "sourceSize": { "w": 54, "h": 49 },
+    "duration": 50
+   },
+   {
+    "filename": "Sprite 5.",
+    "frame": { "x": 270, "y": 0, "w": 54, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 49 },
+    "sourceSize": { "w": 54, "h": 49 },
+    "duration": 100
+   },
+   {
+    "filename": "Sprite 6.",
+    "frame": { "x": 324, "y": 0, "w": 54, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 49 },
+    "sourceSize": { "w": 54, "h": 49 },
+    "duration": 100
+   },
+   {
+    "filename": "Sprite 7.",
+    "frame": { "x": 378, "y": 0, "w": 54, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 49 },
+    "sourceSize": { "w": 54, "h": 49 },
+    "duration": 50
+   },
+   {
+    "filename": "Sprite 8.",
+    "frame": { "x": 432, "y": 0, "w": 54, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 49 },
+    "sourceSize": { "w": 54, "h": 49 },
+    "duration": 50
+   }
+ ],
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.x-dev",
+  "image": "ninja_cross_sheet.png",
+  "format": "RGBA8888",
+  "size": { "w": 486, "h": 49 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "cross", "from": 0, "to": 8, "direction": "forward", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "legs", "opacity": 255, "blendMode": "normal" },
+   { "name": "upper", "opacity": 255, "blendMode": "normal" },
+   { "name": "fx", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

@@ -121,7 +121,7 @@ def main():
         {"tool": "preflight"},
         {"tool": "sprite_manage", "args": {"op": "new", "width": W, "height": fh, "colorMode": "rgb"}},
         {"tool": "palette", "args": {"op": "set", "colors": colors, "replace": True}},
-        {"tool": "layer", "args": {"op": "rename", "layer": "Layer 1", "name": layers[0]}},
+        {"tool": "layer", "args": {"op": "rename", "name": "Layer 1", "newName": layers[0]}},
     ] + [{"tool": "layer", "args": {"op": "create", "name": l}} for l in layers[1:]] + [
         {"tool": "frame", "args": {"op": "add", "count": n - 1}},
         {"tool": "frame", "args": {"op": "set_duration", "durations": durations}},
