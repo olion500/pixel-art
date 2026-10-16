@@ -65,3 +65,24 @@ only re-pose legs/arms; volume must not change.
 3. Grid loop: read each frame back as text, keep head/torso identical to the source, fix by changing characters.
 4. Critic: independent `pixel-critic` cold read and score; a fix is kept only if a blind A/B prefers it.
 5. Export: spritesheet + JSON + GIF.
+
+## Results (aseprite-ai-artist, headless Aseprite)
+
+Setup: Aseprite v1.3.15.5 built from source with no UI or Skia (`LAF_BACKEND=none`; libjpeg-turbo pulled in via a local git clone because zip downloads are blocked).
+The aseprite-ai-artist 0.8.2 MCP server runs as `serve --headless`. `tools/aai_call.mjs` calls its tools; `tools/aai_build.py` generates the call list.
+
+Flow: storyboard (shot list → Gemini → re-generate only the cells that missed) → head lock → Aseprite: palette, rig layers
+(`legs` linked to one cel across all frames / `hips` / `upper` / `fx`), per-frame `draw` grid, rule-based frames via `cel copy+move`,
+per-frame `frame set_duration`, `tag`, `look filmstrip`, `validate`, `export` (.aseprite, sheet+JSON, GIF).
+Review: an independent pixel-critic subagent does a cold read and scores against the rulebook → fix blockers → **a fix is kept only if a blind A/B prefers it**.
+
+| Round | Cross | Jump | Main changes |
+|---|---|---|---|
+| v1 | 5/10 | 3/10 | Feet slide 5–7px, smear isn't a smear / hop in place, dust looks like shoes, one airborne frame |
+| v2 (A/B: v2 wins) | partial | blockers 4/4 fixed | Front foot aligned, chin→reach smear / +12px travel, +10px apex, landing = crouch drawing, grey dust |
+| v3 (A/B: v3 wins) | 5/10 | 5/10 | Leg cel linked, upper body forward, speed lines attached to the arm / dust behind the feet, landing arms forward |
+| v4 (A/B: v4 wins) | **6/10** | **5/10** | `hips` layer split (removes the notch), hit frame = max reach / feet pinned after landing |
+
+Remaining (latest critic): cross — head pulls back 2px at the hit, hips don't move forward. Jump — only 2 airborne frames (16px rise in one step from launch to apex), back heel slides 4px after landing.
+These come from the storyboard drawings themselves, so the next step is adding one rising in-between frame and re-drawing the landing frames to match each other.
+Comparison: `out/compare_aseprite.gif`.
