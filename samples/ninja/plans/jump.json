@@ -1,0 +1,28 @@
+{
+  "name": "in-place long jump",
+  "cols": 5,
+  "ground_align": false,
+  "reference_cell": true,
+  "rules": [
+    "Cell 1 is ONLY the character reference (its standing pose); the animation is cells 2 to 13.",
+    "The jump happens IN PLACE: the motion reads through the poses, not by moving the character. The head never moves more than 5 pixels up or down across all frames and at most 2 pixels sideways; the feet lift at most 5 pixels off the ground line.",
+    "All animation frames are compact: the character is crouched or tucked, never standing straight; only the take-off and rising-stretch frames are long and diagonal.",
+    "Keep exactly the same character size as cell 1 (same head size, same pixel size).",
+    "The pink scarf lags behind the body: it flips up while crouching, trails straight back during the leap, rises up during the fall, and settles after landing."
+  ],
+  "frames": [
+    {"ms": 0,   "pose": "reference: the original standing pose, unchanged"},
+    {"ms": 100, "pose": "ready crouch: knees bent about 90 degrees, torso leaning 20 degrees forward, both arms forward-down in a guard, feet planted; scarf tip up"},
+    {"ms": 120, "pose": "deeper crouch (anticipation): 1 pixel lower, torso leaning 35 degrees forward, both arms swung back behind the hips; scarf flipped up"},
+    {"ms": 60,  "pose": "push-off: back leg extending with the toe still on the ground, front knee driving up, torso at 45 degrees, arms swinging forward; scarf starting to trail back"},
+    {"ms": 60,  "pose": "take-off stretch: the whole body is one 45 degree diagonal line, back leg straight trailing down-back with the toe pointed, front knee raised, arms reaching forward past the head, feet 2 pixels above the ground; scarf trailing back"},
+    {"ms": 70,  "pose": "rising stretch: body nearly horizontal, both legs trailing straight back, both arms reaching forward like a superhero flight; scarf trailing straight back"},
+    {"ms": 120, "pose": "apex: knees start pulling forward under the body, torso tilting back up to 45 degrees, arms forward"},
+    {"ms": 100, "pose": "apex tuck: knees pulled up to the chest, torso almost upright, arms forward; scarf starting to rise"},
+    {"ms": 70,  "pose": "descent: legs extending down toward the ground, torso upright, arms raised up and out for balance; scarf rising up"},
+    {"ms": 60,  "pose": "touch-down: feet touching the ground line, knees slightly bent, torso upright, arms forward; scarf at its highest"},
+    {"ms": 110, "pose": "landing squash: deepest crouch, 1 pixel lower and a wider stance than the ready crouch, torso leaning 25 degrees, arms forward-down; scarf still up"},
+    {"ms": 90,  "pose": "recover: back to the ready crouch, arms in guard; scarf falling"},
+    {"ms": 100, "pose": "ready crouch, exactly like cell 2 (loops)"}
+  ]
+}

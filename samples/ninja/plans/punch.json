@@ -1,0 +1,60 @@
+{
+  "name": "rear-hand cross punch",
+  "cols": 5,
+  "ground_align": true,
+  "reference_cell": false,
+  "rules": [
+    "The character punches IN PLACE: both feet stay planted on exactly the same pixels in every frame (only the back heel may lift 1 pixel at impact).",
+    "The head stays upright at the same height in every frame; it moves forward at most 2 pixels at the moment of impact.",
+    "The punching arm is the REAR arm (the arm on the far/left side of the body in frame 1, farther from the viewer). The near/front hand moves up to guard the chin.",
+    "At full extension the punching arm is perfectly horizontal at visor height and a little longer than natural.",
+    "The pink scarf lags behind the body: it lifts during the wind-up, is pulled straight back at impact, drops while the arm retracts, and swings forward at the end."
+  ],
+  "frames": [
+    {
+      "ms": 100,
+      "pose": "the original fighting stance, unchanged"
+    },
+    {
+      "ms": 120,
+      "pose": "load: hips sink 1 pixel, rear shoulder pulls back 1 pixel, rear fist cocked next to the chin; scarf tip lifts slightly"
+    },
+    {
+      "ms": 60,
+      "pose": "twist: torso starts turning forward, rear fist moves forward past the chin, front hand rises to guard the chin; head 1 pixel forward"
+    },
+    {
+      "ms": 40,
+      "pose": "fast: rear arm three quarters extended forward at visor height, the arm drawn slightly stretched to suggest speed; scarf trailing back",
+      "fx": "smear"
+    },
+    {
+      "ms": 120,
+      "pose": "IMPACT: rear arm fully extended straight forward, horizontal, at visor height, fist at its farthest point; head 2 pixels forward, back heel lifted 1 pixel, front knee slightly more bent; scarf pulled straight back",
+      "fx": "impact"
+    },
+    {
+      "ms": 80,
+      "pose": "hold the impact pose exactly (same as previous frame)",
+      "fx": "spark1"
+    },
+    {
+      "ms": 70,
+      "pose": "retract: rear fist pulled back halfway toward the chest; head 1 pixel forward; scarf dropping down",
+      "fx": "spark2"
+    },
+    {
+      "ms": 70,
+      "pose": "retract: rear fist back near the chin; scarf rippling",
+      "fx": "spark3"
+    },
+    {
+      "ms": 80,
+      "pose": "overshoot: back in the fighting stance but the torso leans 1 pixel further back than the original stance; scarf swinging forward"
+    },
+    {
+      "ms": 100,
+      "pose": "the original fighting stance, unchanged (loops to frame 1)"
+    }
+  ]
+}

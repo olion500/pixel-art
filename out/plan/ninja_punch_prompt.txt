@@ -1,0 +1,19 @@
+This image is a pixel-art sprite sheet template: 5 columns x 2 rows of equal cells on a flat magenta (#FF00FF) background. Cell 1 (top-left) already contains a pixel-art character (ninja in a navy suit with a cyan visor and a pink scarf) drawn with chunky pixels, each art pixel a 8x8 block.
+Draw a rear-hand cross punch animation, side view facing right, filling cells 1 to 10 left to right, top to bottom, EXACTLY as listed (do not invent other poses):
+- Cell 1 (row 1, column 1): the original fighting stance, unchanged.
+- Cell 2 (row 1, column 2): load: hips sink 1 pixel, rear shoulder pulls back 1 pixel, rear fist cocked next to the chin; scarf tip lifts slightly.
+- Cell 3 (row 1, column 3): twist: torso starts turning forward, rear fist moves forward past the chin, front hand rises to guard the chin; head 1 pixel forward.
+- Cell 4 (row 1, column 4): fast: rear arm three quarters extended forward at visor height, the arm drawn slightly stretched to suggest speed; scarf trailing back.
+- Cell 5 (row 1, column 5): IMPACT: rear arm fully extended straight forward, horizontal, at visor height, fist at its farthest point; head 2 pixels forward, back heel lifted 1 pixel, front knee slightly more bent; scarf pulled straight back.
+- Cell 6 (row 2, column 1): hold the impact pose exactly (same as previous frame).
+- Cell 7 (row 2, column 2): retract: rear fist pulled back halfway toward the chest; head 1 pixel forward; scarf dropping down.
+- Cell 8 (row 2, column 3): retract: rear fist back near the chin; scarf rippling.
+- Cell 9 (row 2, column 4): overshoot: back in the fighting stance but the torso leans 1 pixel further back than the original stance; scarf swinging forward.
+- Cell 10 (row 2, column 5): the original fighting stance, unchanged (loops to frame 1).
+Motion rules:
+- The character punches IN PLACE: both feet stay planted on exactly the same pixels in every frame (only the back heel may lift 1 pixel at impact).
+- The head stays upright at the same height in every frame; it moves forward at most 2 pixels at the moment of impact.
+- The punching arm is the REAR arm (the arm on the far/left side of the body in frame 1, farther from the viewer). The near/front hand moves up to guard the chin.
+- At full extension the punching arm is perfectly horizontal at visor height and a little longer than natural.
+- The pink scarf lags behind the body: it lifts during the wind-up, is pulled straight back at impact, drops while the arm retracts, and swings forward at the end.
+Style rules: exactly the same character design, outfit, colors, outline, proportions and size in every cell; same chunky pixel size on the same pixel grid; each character fully inside its own cell, all cells sharing the same ground line; keep cell 1 unchanged. Flat magenta background, no grid lines, no text, no numbers, no shadows, no effects, no motion blur, no anti-aliasing.

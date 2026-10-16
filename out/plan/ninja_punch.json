@@ -1,0 +1,19 @@
+{
+  "plan": "samples/ninja/plans/punch.json",
+  "model": "gemini-3-pro-image",
+  "frame_width": 46,
+  "frame_height": 49,
+  "frames": 10,
+  "durations_ms": [
+    100,
+    120,
+    60,
+    40,
+    120,
+    80,
+    70,
+    70,
+    80,
+    100
+  ]
+}

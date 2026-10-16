@@ -1,0 +1,36 @@
+[
+ {
+  "cell": 2,
+  "pose": "READY CROUCH, not standing: knees bent deeply so the hips are low and the whole character is about 5 art pixels shorter than in cell 1, torso leaning forward, both fists held forward and low in a guard, feet planted wide on the ground line; scarf tip up",
+  "prev": 1,
+  "next": 3
+ },
+ {
+  "cell": 13,
+  "copy": 2
+ },
+ {
+  "cell": 4,
+  "pose": "PUSH-OFF, not a running stride: torso leaning forward 45 degrees, back leg straightening behind the body with its toe still touching the ground line, front knee lifted high in front of the chest, arms swinging forward",
+  "prev": 3,
+  "next": 5
+ },
+ {
+  "cell": 7,
+  "pose": "APEX, not a running stride: both thighs pulled forward and horizontal under the body, knees bent, feet together below the hips, torso tilted 45 degrees forward, both arms reaching forward; scarf trailing back",
+  "prev": 6,
+  "next": 8
+ },
+ {
+  "cell": 10,
+  "pose": "TOUCH-DOWN: both feet on the ground line, knees bent halfway so the character is about 3 art pixels shorter than in cell 1, torso upright, both arms forward; scarf high",
+  "prev": 9,
+  "next": 11
+ },
+ {
+  "cell": 12,
+  "pose": "RECOVER into the READY CROUCH: knees bent deeply, hips low, about 5 art pixels shorter than cell 1, torso leaning forward, fists forward and low; scarf falling",
+  "prev": 11,
+  "next": 13
+ }
+]

@@ -54,7 +54,7 @@ def load_sprite(path):
 
 
 ASPECTS = {"1:1": 1, "3:2": 1.5, "2:3": 2 / 3, "4:3": 4 / 3, "3:4": 0.75, "5:4": 1.25, "4:5": 0.8,
-           "16:9": 16 / 9, "9:16": 9 / 16, "21:9": 21 / 9, "4:1": 4, "1:4": 0.25}
+           "16:9": 16 / 9, "9:16": 9 / 16, "21:9": 21 / 9}  # 4:1 / 1:4 are rejected by Pro image models
 
 
 def cell_size(base, cols, rows):
@@ -169,18 +169,59 @@ def ground_align(frame, ground_y):
     return out
 
 
-def erase_grid_lines(gen, frac=0.9):
-    """Models often draw cell borders even when told not to: long dark rows/columns -> key color."""
+def keep_main(rgba):
+    """Drop islands that touch the cell's left/right edge and are not the main body (a neighbour's scarf)."""
+    m = rgba[..., 3] > 0
+    h, w = m.shape
+    lab = np.zeros((h, w), int)
+    sizes, edge = [0], [False]
+    for y0, x0 in zip(*np.nonzero(m)):
+        if lab[y0, x0]:
+            continue
+        k = len(sizes)
+        lab[y0, x0] = k
+        stack, n, touches = [(y0, x0)], 0, False
+        while stack:
+            y, x = stack.pop()
+            n += 1
+            touches |= x <= 1 or x >= w - 2
+            for ny in (y - 1, y, y + 1):
+                for nx in (x - 1, x, x + 1):
+                    if 0 <= ny < h and 0 <= nx < w and m[ny, nx] and not lab[ny, nx]:
+                        lab[ny, nx] = k
+                        stack.append((ny, nx))
+        sizes.append(n)
+        edge.append(touches)
+    if len(sizes) <= 2:
+        return rgba
+    main = int(np.argmax(sizes))
+    out = rgba.copy()
+    for k in range(1, len(sizes)):
+        if k != main and edge[k]:
+            out[lab == k] = 0
+    return out
+
+
+def erase_grid_lines(gen, frac=0.9, cols=None, rows=None, band=5, near_frac=0.3):
+    """Models often draw cell borders even when told not to: long dark rows/columns -> key color.
+
+    Lines spanning the whole image go at `frac`; with the grid known, partial lines (left after
+    pasting re-drawn cells) are also removed within `band` px of each cell boundary at `near_frac`.
+    """
     a = np.asarray(gen).copy()
     dark = a.astype(int).sum(-1) < 200
-    for axis in (0, 1):
-        lines = np.nonzero(dark.mean(axis=1 - axis) > frac)[0]
-        for i in lines:
-            sl = slice(max(0, i - 1), i + 2)
-            if axis == 0:
-                a[sl, :] = KEY_RGB
-            else:
-                a[:, sl] = KEY_RGB
+    for axis, n in ((0, rows), (1, cols)):
+        size = a.shape[axis]
+        frac_of = dark.mean(axis=1 - axis)
+        bounds = [round(i * size / n) for i in range(n + 1)] if n else []
+        for i in range(size):
+            near = any(abs(i - b) <= band for b in bounds)
+            if frac_of[i] > frac or (near and frac_of[i] > near_frac):
+                sl = slice(max(0, i - 1), i + 2)
+                if axis == 0:
+                    a[sl, :] = KEY_RGB
+                else:
+                    a[:, sl] = KEY_RGB
     return Image.fromarray(a)
 
 
@@ -193,7 +234,7 @@ def postprocess(gen, sprite, cols, rows, cell, n, origin, palette, align_ground=
     that step, its grid phase anchored on the character's bounding box (outlines sit on pixel
     borders), and placed so the model's frame 1 lands exactly where the source sits.
     """
-    gen = erase_grid_lines(gen)
+    gen = erase_grid_lines(gen, cols=cols, rows=rows)
     cw, ch = cell
     gw, gh = gen.width / cols, gen.height / rows
     cells = []
@@ -201,7 +242,15 @@ def postprocess(gen, sprite, cols, rows, cell, n, origin, palette, align_ground=
         r, c = divmod(k, cols)
         crop = gen.crop((round(c * gw), round(r * gh), round((c + 1) * gw), round((r + 1) * gh)))
         rgba = key_out(crop)
-        rgba = drop_specks(rgba, 40)  # stray key-color noise in output resolution
+        # a cell's own border lines (left after pasting re-drawn cells): dark rows/cols near its edges
+        dark = rgba[..., :3].astype(int).sum(-1) < 200
+        for i in list(range(8)) + list(range(rgba.shape[0] - 8, rgba.shape[0])):
+            if dark[i].mean() > 0.3:
+                rgba[max(0, i - 1):i + 2, :, 3] = 0
+        for j in list(range(8)) + list(range(rgba.shape[1] - 8, rgba.shape[1])):
+            if dark[:, j].mean() > 0.3:
+                rgba[:, max(0, j - 1):j + 2, 3] = 0
+        rgba = keep_main(drop_specks(rgba, 40))  # key noise, neighbouring cells' overhang
         cells.append(rgba)
 
     def bbox(a):
@@ -228,6 +277,9 @@ def postprocess(gen, sprite, cols, rows, cell, n, origin, palette, align_ground=
             ys = slice(max(0, py), min(ch, py + oh))
             xs = slice(max(0, px), min(cw, px + ow))
             f[ys, xs] = small[ys.start - py:ys.stop - py, xs.start - px:xs.stop - px]
+        for y in (0, 1, ch - 2, ch - 1):           # leftover cell borders at native resolution
+            if (f[y, :, 3] > 0).mean() > 0.6:
+                f[y] = 0
         frames.append(drop_specks(fill_seams(snap(f, palette)), 6))
 
     f0 = np.zeros((ch, cw, 4), np.uint8)

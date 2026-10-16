@@ -1,0 +1,14 @@
+This is a pixel-art sprite sheet, 5 columns x 3 rows, of a in-place long jump animation. Redraw ONLY the cells listed below so they match their description; keep every other cell exactly as it is, and keep the same character design, size, pixel size, ground line and flat magenta background:
+- Cell 2: READY CROUCH, not standing: knees bent deeply so the hips are low and the whole character is about 5 art pixels shorter than in cell 1, torso leaning forward, both fists held forward and low in a guard, feet planted wide on the ground line; scarf tip up.
+- Cell 4: PUSH-OFF, not a running stride: torso leaning forward 45 degrees, back leg straightening behind the body with its toe still touching the ground line, front knee lifted high in front of the chest, arms swinging forward.
+- Cell 7: APEX, not a running stride: both thighs pulled forward and horizontal under the body, knees bent, feet together below the hips, torso tilted 45 degrees forward, both arms reaching forward; scarf trailing back.
+- Cell 10: TOUCH-DOWN: both feet on the ground line, knees bent halfway so the character is about 3 art pixels shorter than in cell 1, torso upright, both arms forward; scarf high.
+- Cell 12: RECOVER into the READY CROUCH: knees bent deeply, hips low, about 5 art pixels shorter than cell 1, torso leaning forward, fists forward and low; scarf falling.
+- Cell 13: READY CROUCH identical to the new cell 2: knees bent deeply, hips low, torso leaning forward, fists forward and low, feet planted wide.
+Motion rules:
+- Cell 1 is ONLY the character reference (its standing pose); the animation is cells 2 to 13.
+- The jump happens IN PLACE: the motion reads through the poses, not by moving the character. The head never moves more than 5 pixels up or down across all frames and at most 2 pixels sideways; the feet lift at most 5 pixels off the ground line.
+- All animation frames are compact: the character is crouched or tucked, never standing straight; only the take-off and rising-stretch frames are long and diagonal.
+- Keep exactly the same character size as cell 1 (same head size, same pixel size).
+- The pink scarf lags behind the body: it flips up while crouching, trails straight back during the leap, rises up during the fall, and settles after landing.
+No grid lines, no text, no effects, no anti-aliasing.

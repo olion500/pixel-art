@@ -1,0 +1,23 @@
+This image is a pixel-art sprite sheet template: 5 columns x 3 rows of equal cells on a flat magenta (#FF00FF) background. Cell 1 (top-left) already contains a pixel-art character (ninja in a navy suit with a cyan visor and a pink scarf) drawn with chunky pixels, each art pixel a 8x8 block.
+Draw a in-place long jump animation, side view facing right, filling cells 1 to 13 left to right, top to bottom, EXACTLY as listed (do not invent other poses):
+- Cell 1 (row 1, column 1): reference: the original standing pose, unchanged.
+- Cell 2 (row 1, column 2): ready crouch: knees bent about 90 degrees, torso leaning 20 degrees forward, both arms forward-down in a guard, feet planted; scarf tip up.
+- Cell 3 (row 1, column 3): deeper crouch (anticipation): 1 pixel lower, torso leaning 35 degrees forward, both arms swung back behind the hips; scarf flipped up.
+- Cell 4 (row 1, column 4): push-off: back leg extending with the toe still on the ground, front knee driving up, torso at 45 degrees, arms swinging forward; scarf starting to trail back.
+- Cell 5 (row 1, column 5): take-off stretch: the whole body is one 45 degree diagonal line, back leg straight trailing down-back with the toe pointed, front knee raised, arms reaching forward past the head, feet 2 pixels above the ground; scarf trailing back.
+- Cell 6 (row 2, column 1): rising stretch: body nearly horizontal, both legs trailing straight back, both arms reaching forward like a superhero flight; scarf trailing straight back.
+- Cell 7 (row 2, column 2): apex: knees start pulling forward under the body, torso tilting back up to 45 degrees, arms forward.
+- Cell 8 (row 2, column 3): apex tuck: knees pulled up to the chest, torso almost upright, arms forward; scarf starting to rise.
+- Cell 9 (row 2, column 4): descent: legs extending down toward the ground, torso upright, arms raised up and out for balance; scarf rising up.
+- Cell 10 (row 2, column 5): touch-down: feet touching the ground line, knees slightly bent, torso upright, arms forward; scarf at its highest.
+- Cell 11 (row 3, column 1): landing squash: deepest crouch, 1 pixel lower and a wider stance than the ready crouch, torso leaning 25 degrees, arms forward-down; scarf still up.
+- Cell 12 (row 3, column 2): recover: back to the ready crouch, arms in guard; scarf falling.
+- Cell 13 (row 3, column 3): ready crouch, exactly like cell 2 (loops).
+- Cells 14 to 15: leave empty (flat magenta).
+Motion rules:
+- Cell 1 is ONLY the character reference (its standing pose); the animation is cells 2 to 13.
+- The jump happens IN PLACE: the motion reads through the poses, not by moving the character. The head never moves more than 5 pixels up or down across all frames and at most 2 pixels sideways; the feet lift at most 5 pixels off the ground line.
+- All animation frames are compact: the character is crouched or tucked, never standing straight; only the take-off and rising-stretch frames are long and diagonal.
+- Keep exactly the same character size as cell 1 (same head size, same pixel size).
+- The pink scarf lags behind the body: it flips up while crouching, trails straight back during the leap, rises up during the fall, and settles after landing.
+Style rules: exactly the same character design, outfit, colors, outline, proportions and size in every cell; same chunky pixel size on the same pixel grid; each character fully inside its own cell, all cells sharing the same ground line; keep cell 1 unchanged. Flat magenta background, no grid lines, no text, no numbers, no shadows, no effects, no motion blur, no anti-aliasing.
