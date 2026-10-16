@@ -217,3 +217,109 @@ const JUMP = [
   CROUCH,
 ]
 anim("ninja_jump", { w: 46, h: 40, frames: JUMP.length, fps: 10 }, (c) => pose(c, JUMP[c.frame], c.phase, 4, 7))
+
+// ================================================================ v2: motion principles + FX
+// Applied from research (docs section 11): uneven timing (holds on anticipation, impact and apex),
+// one fast smear frame, exaggerated reach at full extension, hit flash + spark + speed lines,
+// overshoot on recovery, squash/stretch on crouch/launch/land, scarf as overlapping action,
+// dust on take-off and landing. Each frame carries its own duration via frame({ ms }).
+
+function seq(name, opts, list, ox = 0, oy = 0) {
+  const n = list.length
+  anim(name, opts, ...list.map(([ms, p], i) => frame({ ms }, (c) => pose(c, p, i / n, ox, oy))))
+}
+
+// ---- FX helpers (canvas coords). Effects use the light keys only: w white, h pale cyan, c cyan.
+function flashFist(c, x, y) {
+  for (const [fx, fy, k] of FIST) c.px(x + fx - FIST_C[0], y + fy - FIST_C[1], k === "k" ? "k" : "w")
+}
+function spark(c, x, y, stage) {
+  const ray = (dx, dy, n, inner, outer, from = 1) => {
+    for (let i = from; i <= n; i++) c.px(x + dx * i, y + dy * i, i <= inner ? "w" : outer)
+  }
+  if (stage === 0) {                      // contact: small bright cross
+    c.px(x, y, "w"); for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) ray(dx, dy, 2, 1, "h")
+    for (const [dx, dy] of [[1, 1], [1, -1], [-1, 1], [-1, -1]]) ray(dx, dy, 1, 0, "h")
+  } else if (stage === 1) {               // burst: long orthogonal rays, short diagonals, hot core
+    c.circ(x, y, 1, "w")
+    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) ray(dx, dy, 5, 3, "h", 2)
+    for (const [dx, dy] of [[1, 1], [1, -1], [-1, 1], [-1, -1]]) ray(dx, dy, 3, 1, "h", 2)
+  } else if (stage === 2) {               // ring breaking up, rays detached
+    for (let a = 0; a < 16; a++) if (a % 2 === 0)
+      c.px(x + Math.round(4 * Math.cos(a * Math.PI / 8)), y + Math.round(4 * Math.sin(a * Math.PI / 8)), "h")
+    for (const [dx, dy] of [[1, 0], [0, 1], [0, -1], [-1, 0]]) { c.px(x + dx * 6, y + dy * 6, "c"); c.px(x + dx * 7, y + dy * 7, "c") }
+  } else if (stage === 3) {               // last particles drifting out
+    for (const [dx, dy] of [[8, -2], [6, 4], [-2, -7], [1, 7], [9, 1], [-5, 3]]) c.px(x + dx, y + dy, dx % 2 ? "h" : "c")
+  }
+}
+function speedLines(c, x0, x1, ys, gap = 0) {
+  for (const y of ys) for (let x = x0; x <= x1; x++) if (!gap || (x - x0) % (gap + 3) < 3) c.px(x, y, (x - x0) < (x1 - x0) / 2 ? "h" : "w")
+}
+function smearArm(c, x0, x1, y) {          // tapered two-tone streak along the punch path
+  c.poly([x0, y + 1, x1, y - 1, x1, y + 3, x0, y + 2], "h")
+  c.line(x0 + 3, y + 1, x1, y + 1, "w", 1)
+}
+function dust(c, x, y, stage, dir = 0) {   // dir: -1 left only, 1 right only, 0 both
+  const sides = dir ? [dir] : [-1, 1]
+  for (const s of sides) {
+    if (stage === 0) { c.circ(x + s * 2, y - 1, 1, "w"); c.px(x + s * 3, y, "s") }
+    if (stage === 1) { c.circ(x + s * 5, y - 2, 2, "w"); c.hline(x + s * 5 - 2, y, 5, "s"); c.px(x + s * 2, y - 1, "s") }
+    if (stage === 2) { c.px(x + s * 8, y - 3, "s"); c.px(x + s * 7, y - 1, "w"); c.px(x + s * 9, y - 1, "s") }
+  }
+}
+
+// ---- punch v2: rear-hand cross with smear, hitstop hold, spark, overshoot
+const ARM_AT = [16, 13]
+const reach = (dx, e, h) => ({ f: GUARD, b: { at: ARM_AT, e, h } })
+const fistAt = (p) => [ARM_AT[0] + p.dx + p.arms.b.h[0], ARM_AT[1] + p.arms.b.h[1]]
+const IMPACT = { dx: 3, lean: 0.1, legs: stanceLegs(-8, 3, 6), arms: reach(3, [10, -1], [20, -1]), scarf: { trail: 3, lift: 2, amp: 0.5 } }
+const PUNCH2 = [
+  [120, {}],
+  [150, { dx: -1, dy: 1, lean: -0.06, scarf: { lift: 1, amp: 0.6 } }],                       // anticipation (held)
+  [50, { dx: 1, lean: 0.06, legs: stanceLegs(-6, 2, 4), arms: reach(1, [5, 0], [10, -1]), scarf: { trail: 2, lift: 1 },
+         fix: [(c) => { smearArm(c, 21, 30, 12) }] }],                                         // smear
+  [130, { ...IMPACT, fix: [(c) => { const [x, y] = fistAt(IMPACT); flashFist(c, x, y); spark(c, x + 3, y, 0); speedLines(c, 27, 34, [9, 15]) }] }],
+  [90, { ...IMPACT, fix: [(c) => { const [x, y] = fistAt(IMPACT); spark(c, x + 3, y, 1); speedLines(c, 30, 35, [9, 15], 1) }] }],
+  [70, { ...IMPACT, arms: reach(3, [9, -1], [19, -1]), fix: [(c) => { const [x, y] = fistAt(IMPACT); spark(c, x + 2, y, 2) }] }],
+  [80, { dx: 1, lean: 0.05, legs: stanceLegs(-6, 2, 4), arms: reach(1, [5, 2], [9, 0]), scarf: { trail: 1, lift: -1 },
+         fix: [(c) => spark(c, 38, 12, 3)] }],                                                 // recovery
+  [80, { dx: -1, scarf: { trail: 0, lift: -1, amp: 0.8 } }],                                    // overshoot 1px back
+  [130, { scarf: { amp: 0.6 } }],
+]
+seq("ninja_punch_v2", { w: 48, h: 33 }, PUNCH2)
+
+// ---- jump v2: squash -> stretch -> hang -> fall -> squash, scarf lagging the body
+const G = "g"
+const legs2 = (b, f) => ({ b, f })
+const JUMP2 = [
+  [120, {}],
+  [130, { dy: 3, lean: 0.12, head: [0, 1], legs: legs2([[-4, 1], [-6, G]], [[4, 0], [4, G]]),
+          arms: A([1, 3], [3, 5], [-2, 3], [-5, 4]), scarf: { lift: 1, amp: 0.6 } }],           // anticipation squash
+  [60, { dy: 4, lean: 0.2, head: [0, 1], legs: legs2([[-5, 0], [-7, G]], [[5, -1], [4, G]]),
+         arms: A([-2, 3], [-5, 4], [-3, 2], [-7, 2]), scarf: { lift: 2, amp: 0.6 } }],
+  [60, { dy: -2, lean: 0.08, head: [0, -1], legs: legs2([[-1, 4], [-3, 8, 4]], [[1, 4], [0, 8, 3]]),
+         arms: A([2, -3], [4, -7], [1, -3], [2, -7]), scarf: { lift: -2, trail: 1 },
+         fix: [(c, ox, oy) => dust(c, 17 + ox, 32 + oy, 0)] }],                                // launch stretch
+  [70, { dy: -5, lean: 0.12, legs: legs2([[-2, 4], [-4, 7, 3]], [[3, 2], [2, 6, 2]]),
+         arms: A([3, -2], [6, -5], [2, -2], [5, -4]), scarf: { lift: -2, trail: 2 },
+         fix: [(c, ox, oy) => dust(c, 17 + ox, 32 + oy, 1)] }],
+  [80, { dy: -7, lean: 0.15, legs: legs2([[1, 3], [-1, 6, 2]], [[4, 1], [3, 5, 1]]),
+         arms: A([4, 0], [7, -1], [3, 0], [6, 0]), scarf: { lift: -1, trail: 2 },
+         fix: [(c, ox, oy) => dust(c, 17 + ox, 32 + oy, 2)] }],
+  [140, { dy: -8, lean: 0.18, legs: legs2([[3, -1], [0, 3]], [[5, -2], [3, 3]]),
+          arms: A([4, 1], [7, 1], [3, 2], [6, 2]), scarf: { lift: 0, trail: 1, amp: 1.5 } }],    // apex tuck (hang)
+  [100, { dy: -8, lean: 0.12, legs: legs2([[2, 1], [0, 5]], [[4, 0], [4, 5]]),
+          arms: A([3, -1], [6, -3], [-2, -2], [-4, -5]), scarf: { lift: 2, amp: 1 } }],
+  [70, { dy: -5, lean: 0.05, legs: legs2([[0, 3], [-2, 7, 1]], [[3, 3], [4, 7]]),
+         arms: A([3, -2], [5, -5], [-3, -2], [-5, -5]), scarf: { lift: 3, amp: 0.8 } }],          // fall: scarf rides up
+  [60, { dy: -2, legs: legs2([[-1, 3], [-3, 7]], [[3, 3], [4, 7]]),
+         arms: A([3, -2], [5, -5], [-3, -2], [-5, -5]), scarf: { lift: 3, amp: 0.8 } }],
+  [110, { dy: 4, lean: 0.2, head: [0, 1], legs: legs2([[-5, 0], [-7, G]], [[5, -1], [4, G]]),
+          arms: A([3, 3], [6, 5], [-3, 3], [-6, 5]), scarf: { lift: 1, amp: 0.5 },
+          fix: [(c, ox, oy) => dust(c, 17 + ox, 32 + oy, 0)] }],                               // landing squash
+  [90, { dy: 2, lean: 0.1, legs: legs2([[-4, 1], [-6, G]], [[4, 1], [4, G]]),
+         arms: A([2, 3], [4, 4], [-2, 3], [-4, 6]), scarf: { lift: -1, amp: 0.8 },
+         fix: [(c, ox, oy) => dust(c, 17 + ox, 32 + oy, 1)] }],
+  [130, { scarf: { lift: -1, amp: 1 }, fix: [(c, ox, oy) => dust(c, 17 + ox, 32 + oy, 2)] }],    // settle, scarf follows through
+]
+seq("ninja_jump_v2", { w: 46, h: 44 }, JUMP2, 4, 10)

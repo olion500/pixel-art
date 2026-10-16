@@ -1,0 +1,295 @@
+{
+ "frames": {
+  "ninja_jump_v2_0": {
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "sourceSize": {
+    "w": 46,
+    "h": 44
+   },
+   "duration": 120
+  },
+  "ninja_jump_v2_1": {
+   "frame": {
+    "x": 46,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "sourceSize": {
+    "w": 46,
+    "h": 44
+   },
+   "duration": 130
+  },
+  "ninja_jump_v2_2": {
+   "frame": {
+    "x": 92,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "sourceSize": {
+    "w": 46,
+    "h": 44
+   },
+   "duration": 60
+  },
+  "ninja_jump_v2_3": {
+   "frame": {
+    "x": 138,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "sourceSize": {
+    "w": 46,
+    "h": 44
+   },
+   "duration": 60
+  },
+  "ninja_jump_v2_4": {
+   "frame": {
+    "x": 184,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "sourceSize": {
+    "w": 46,
+    "h": 44
+   },
+   "duration": 70
+  },
+  "ninja_jump_v2_5": {
+   "frame": {
+    "x": 230,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "sourceSize": {
+    "w": 46,
+    "h": 44
+   },
+   "duration": 80
+  },
+  "ninja_jump_v2_6": {
+   "frame": {
+    "x": 276,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "sourceSize": {
+    "w": 46,
+    "h": 44
+   },
+   "duration": 140
+  },
+  "ninja_jump_v2_7": {
+   "frame": {
+    "x": 322,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "sourceSize": {
+    "w": 46,
+    "h": 44
+   },
+   "duration": 100
+  },
+  "ninja_jump_v2_8": {
+   "frame": {
+    "x": 368,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "sourceSize": {
+    "w": 46,
+    "h": 44
+   },
+   "duration": 70
+  },
+  "ninja_jump_v2_9": {
+   "frame": {
+    "x": 414,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "sourceSize": {
+    "w": 46,
+    "h": 44
+   },
+   "duration": 60
+  },
+  "ninja_jump_v2_10": {
+   "frame": {
+    "x": 460,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "sourceSize": {
+    "w": 46,
+    "h": 44
+   },
+   "duration": 110
+  },
+  "ninja_jump_v2_11": {
+   "frame": {
+    "x": 506,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "sourceSize": {
+    "w": 46,
+    "h": 44
+   },
+   "duration": 90
+  },
+  "ninja_jump_v2_12": {
+   "frame": {
+    "x": 552,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 46,
+    "h": 44
+   },
+   "sourceSize": {
+    "w": 46,
+    "h": 44
+   },
+   "duration": 130
+  }
+ },
+ "meta": {
+  "app": "pxl",
+  "image": "ninja_jump_v2.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 598,
+   "h": 44
+  },
+  "scale": "1",
+  "frameTags": [
+   {
+    "name": "ninja_jump_v2",
+    "from": 0,
+    "to": 12,
+    "direction": "forward"
+   }
+  ]
+ }
+}
