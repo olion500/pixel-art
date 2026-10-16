@@ -1,0 +1,21 @@
+This image is a pixel-art sprite sheet template: 4 columns x 3 rows of equal cells on a flat magenta (#FF00FF) background. Cell 1 (top-left) already contains a pixel-art character (ninja in a navy suit with a cyan visor and a pink scarf) drawn with chunky pixels, each art pixel a 8x8 block.
+Draw a standing broad jump (timed strip) animation, side view facing right, filling cells 1 to 11 left to right, top to bottom, EXACTLY as listed (do not invent other poses):
+- Cell 1 (row 1, column 1): reference: the original standing pose, unchanged.
+- Cell 2 (row 1, column 2): stand tall, weight up, both arms raised slightly in front.
+- Cell 3 (row 1, column 3): dip: knees bending, the body 3 pixels lower, both arms swinging back.
+- Cell 4 (row 1, column 4): deep crouch: the head 9 pixels lower than standing, torso leaning 45 degrees forward, thighs nearly horizontal, both arms fully back behind the hips.
+- Cell 5 (row 2, column 1): push: legs extending, the body rising, arms swinging forward, back toe still on the ground.
+- Cell 6 (row 2, column 2): take-off: the whole body one straight diagonal line from the back toe (still touching the ground) to the fingertips reaching forward-up; stretched.
+- Cell 7 (row 2, column 3): apex: in the air 10 pixels above the standing height, knees tucked up toward the chest, arms forward; scarf trailing back and down.
+- Cell 8 (row 2, column 4): descent: in the air 6 pixels up, both arms raised up for balance, legs reaching forward and down, head level; scarf streaming upward.
+- Cell 9 (row 3, column 1): landing crouch: feet on the ground line, head 9 pixels lower than standing, knees bent about 90 degrees, arms forward and down; scarf still up.
+- Cell 10 (row 3, column 2): rise: coming up, head 4 pixels lower than standing, arms lowering; scarf falling.
+- Cell 11 (row 3, column 3): stand: the standing pose of cell 2; scarf settling.
+- Cells 12 to 12: leave empty (flat magenta).
+Motion rules:
+- Cell 1 is ONLY the character reference; the animation is cells 2 to 11.
+- Keep exactly the same character size as cell 1 in every cell (same helmet size, same pixel size); only the pose changes.
+- On ground frames the feet stand on the same ground line; the character jumps mostly upward, with little forward travel.
+- Rising frames: limbs trail behind. Falling frames: arms up, legs reaching forward-down, head level.
+- The pink scarf lags one frame behind the body: up while crouching, trailing back/down while rising, streaming UP while falling, settling after landing.
+Style rules: exactly the same character design, outfit, colors, outline, proportions and size in every cell; same chunky pixel size on the same pixel grid; each character fully inside its own cell, all cells sharing the same ground line; keep cell 1 unchanged. Flat magenta background, no grid lines, no text, no numbers, no shadows, no effects, no motion blur, no anti-aliasing.

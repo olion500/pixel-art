@@ -1,0 +1,19 @@
+{
+  "plan": "samples/ninja/plans/jump_v2.json",
+  "model": "gemini-3-pro-image",
+  "frame_width": 46,
+  "frame_height": 46,
+  "frames": 10,
+  "durations_ms": [
+    120,
+    80,
+    100,
+    60,
+    60,
+    100,
+    60,
+    140,
+    120,
+    120
+  ]
+}

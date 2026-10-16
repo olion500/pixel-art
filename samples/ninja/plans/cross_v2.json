@@ -1,0 +1,58 @@
+{
+  "name": "rear-hand cross punch",
+  "cols": 5,
+  "ground_align": true,
+  "reference_cell": false,
+  "rules": [
+    "The feet stay planted on exactly the same pixels in every frame (only the back heel lifts 1 pixel on the hit).",
+    "The head stays upright and level; it moves forward at most 2 pixels.",
+    "The punching arm is the REAR arm (the far arm, on the left side of the body in cell 1). Power chain: hips move first, then torso, then arm, then fist, each one frame later.",
+    "The pink scarf lags the head by one frame: lifts during the wind-up, pulled straight back during the strike, drops on the recover, swings forward on the overshoot."
+  ],
+  "frames": [
+    {
+      "ms": 100,
+      "pose": "the original guard stance, unchanged"
+    },
+    {
+      "ms": 50,
+      "pose": "wind-up A: hips 1 pixel lower, rear shoulder pulled 1 pixel back, rear fist cocked next to the chin"
+    },
+    {
+      "ms": 50,
+      "pose": "wind-up B: torso rotating forward, rear elbow lifting, head 1 pixel forward, upright",
+      "cel": "copy:2:1"
+    },
+    {
+      "ms": 50,
+      "pose": "strike in progress: rear arm three-quarters extended forward at visor height, the front hand rising to guard the chin",
+      "fx": "smear"
+    },
+    {
+      "ms": 50,
+      "pose": "rear arm reaching full extension forward at visor height",
+      "fx": "smear2"
+    },
+    {
+      "ms": 100,
+      "pose": "HIT: rear arm perfectly straight and horizontal at visor height, a little longer than natural, fist at its farthest point; head 2 pixels forward and level, back heel lifted 1 pixel, front knee slightly more bent; scarf pulled straight back",
+      "fx": "impact"
+    },
+    {
+      "ms": 100,
+      "pose": "follow: same as the hit pose with the arm 1 pixel shorter",
+      "fx": "spark1"
+    },
+    {
+      "ms": 50,
+      "pose": "recover: rear fist pulled back low to the chest; scarf dropping",
+      "fx": "spark2"
+    },
+    {
+      "ms": 50,
+      "pose": "overshoot: the original guard stance shifted 1 pixel BACK; scarf swinging forward",
+      "cel": "copy:1:-1",
+      "fx": "spark3"
+    }
+  ]
+}

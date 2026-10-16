@@ -1,0 +1,18 @@
+{
+  "plan": "samples/ninja/plans/cross_v2.json",
+  "model": "gemini-3-pro-image",
+  "frame_width": 46,
+  "frame_height": 49,
+  "frames": 9,
+  "durations_ms": [
+    100,
+    50,
+    50,
+    50,
+    50,
+    100,
+    100,
+    50,
+    50
+  ]
+}

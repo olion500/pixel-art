@@ -1,0 +1,63 @@
+{
+  "name": "standing broad jump (timed strip)",
+  "cols": 4,
+  "ground_align": false,
+  "reference_cell": true,
+  "rules": [
+    "Cell 1 is ONLY the character reference; the animation is cells 2 to 11.",
+    "Keep exactly the same character size as cell 1 in every cell (same helmet size, same pixel size); only the pose changes.",
+    "On ground frames the feet stand on the same ground line; the character jumps mostly upward, with little forward travel.",
+    "Rising frames: limbs trail behind. Falling frames: arms up, legs reaching forward-down, head level.",
+    "The pink scarf lags one frame behind the body: up while crouching, trailing back/down while rising, streaming UP while falling, settling after landing."
+  ],
+  "frames": [
+    {
+      "ms": 0,
+      "pose": "reference: the original standing pose, unchanged"
+    },
+    {
+      "ms": 120,
+      "pose": "stand tall, weight up, both arms raised slightly in front"
+    },
+    {
+      "ms": 80,
+      "pose": "dip: knees bending, the body 3 pixels lower, both arms swinging back"
+    },
+    {
+      "ms": 100,
+      "pose": "deep crouch: the head 9 pixels lower than standing, torso leaning 45 degrees forward, thighs nearly horizontal, both arms fully back behind the hips"
+    },
+    {
+      "ms": 60,
+      "pose": "push: legs extending, the body rising, arms swinging forward, back toe still on the ground"
+    },
+    {
+      "ms": 60,
+      "pose": "take-off: the whole body one straight diagonal line from the back toe (still touching the ground) to the fingertips reaching forward-up; stretched",
+      "fx": "dust0"
+    },
+    {
+      "ms": 100,
+      "pose": "apex: in the air 10 pixels above the standing height, knees tucked up toward the chest, arms forward; scarf trailing back and down",
+      "fx": "dust1"
+    },
+    {
+      "ms": 60,
+      "pose": "descent: in the air 6 pixels up, both arms raised up for balance, legs reaching forward and down, head level; scarf streaming upward"
+    },
+    {
+      "ms": 140,
+      "pose": "landing crouch: feet on the ground line, head 9 pixels lower than standing, knees bent about 90 degrees, arms forward and down; scarf still up"
+    },
+    {
+      "ms": 120,
+      "pose": "rise: coming up, head 4 pixels lower than standing, arms lowering; scarf falling",
+      "fx": "dust0"
+    },
+    {
+      "ms": 120,
+      "pose": "stand: the standing pose of cell 2; scarf settling",
+      "fx": "dust1"
+    }
+  ]
+}
