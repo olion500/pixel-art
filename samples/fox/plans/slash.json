@@ -1,0 +1,51 @@
+{
+  "name": "iaido draw-cut sword slash",
+  "cols": 4,
+  "ground_align": true,
+  "reference_cell": false,
+  "rules": [
+    "The character stays in place; both feet stay on the same pixels unless the pose says the front foot lunges.",
+    "The face pixels (eyes, mouth) are identical in every frame; the head stays upright.",
+    "The fox tail and the teal cloak lag one frame behind the body and swing opposite to its motion."
+  ],
+  "frames": [
+    {
+      "ms": 100,
+      "pose": "stance: the original pose, hand on the sword hilt at the hip"
+    },
+    {
+      "ms": 100,
+      "pose": "wind-up: knees bent 2 pixels lower, torso twisted back, hand gripping the hilt, the blade starting to leave the sheath"
+    },
+    {
+      "ms": 50,
+      "pose": "fast draw: the sword swept from the hip up and forward in a blur, arm extending",
+      "fx": "arc"
+    },
+    {
+      "ms": 100,
+      "pose": "HIT: front foot lunged 3 pixels forward, sword arm fully extended forward with the blade slightly above horizontal, blade a little longer than natural",
+      "fx": "impact"
+    },
+    {
+      "ms": 50,
+      "pose": "follow-through: blade continued down and forward past the target, body still lunged",
+      "fx": "spark1"
+    },
+    {
+      "ms": 100,
+      "pose": "recover: back toward the stance, sword returning to the sheath along a lower path",
+      "fx": "spark2"
+    },
+    {
+      "ms": 50,
+      "pose": "overshoot: the stance of cell 1 with the upper body 1 pixel further back",
+      "fx": "spark3"
+    }
+  ],
+  "strike_band": [
+    0.25,
+    0.55
+  ],
+  "smear_colors": "bright"
+}

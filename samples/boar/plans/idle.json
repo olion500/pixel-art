@@ -1,0 +1,29 @@
+{
+  "name": "heavy idle breathing loop",
+  "cols": 4,
+  "ground_align": true,
+  "reference_cell": false,
+  "rules": [
+    "Side view facing right; the creature keeps exactly the same size and design in every cell; the stone shell plates are rigid.",
+    "The head lags one frame behind the body; the stubby tail moves on its own rhythm.",
+    "Heavy creature: very small bounce, slow wind-ups, long recoveries."
+  ],
+  "frames": [
+    {
+      "ms": 400,
+      "pose": "the original standing pose, unchanged"
+    },
+    {
+      "ms": 200,
+      "pose": "exhale: belly and back 1 pixel lower, hooves unchanged, the head still up"
+    },
+    {
+      "ms": 400,
+      "pose": "exhale hold: head now 1 pixel lower, a small breath at the snout, the tail flicked 1 pixel"
+    },
+    {
+      "ms": 200,
+      "pose": "inhale: body back up, the head still low"
+    }
+  ]
+}

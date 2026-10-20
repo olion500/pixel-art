@@ -63,6 +63,8 @@ def main():
     ap.add_argument("--waist", type=int, default=0, help="frame row splitting upper/legs layers (0 = single body layer)")
     ap.add_argument("--hips", type=int, default=0, help="rows above the waist kept on their own unshifted 'hips' layer")
     ap.add_argument("--head-err", type=int, default=120)
+    ap.add_argument("--head-rect", default="15,0,27,8",
+                    help="x0,y0,x1,y1 of the rigid head in the base sprite to lock, or 'none'")
     ap.add_argument("--pad", type=int, default=8, help="extra px on the right (sparks, forward travel)")
     ap.add_argument("--top-pad", type=int, default=0, help="extra px on top (jump apex)")
     ap.add_argument("--align-front-shoe", action="store_true",
@@ -84,7 +86,12 @@ def main():
     base = np.asarray(Image.open(a.base).convert("RGBA")).copy()
     base[..., 3] = np.where(base[..., 3] > 127, 255, 0)
     pal = kmeans_palette(base, 16)
-    frames, report = lock_heads(frames, snap(base, pal), HEAD, ((fw - 33) // 2, fh - 35), a.head_err)
+    bh, bw = base.shape[:2]
+    if a.head_rect != "none":
+        rect = tuple(int(v) for v in a.head_rect.split(","))
+        frames, report = lock_heads(frames, snap(base, pal), rect, ((fw - bw) // 2, fh - bh - 2), a.head_err)
+    else:
+        report = [(i, 0, 0, 0, "no lock") for i in range(len(frames))]
 
     def shift(img, dx, dy):
         out = np.zeros_like(img)
@@ -95,10 +102,12 @@ def main():
         return out
 
     def front_shoe_right(img):
+        """Right edge of the ground contact: right-most opaque pixel in the lowest 3 rows (any character)."""
         al = img[..., 3] > 0
-        shoe = al & (img[..., 0] > 110) & (img[..., 1] > 150) & (img[..., 2] > 160)
-        shoe[:img.shape[0] - 12] = False
-        xs = np.nonzero(shoe.any(0))[0]
+        rows = np.nonzero(al.any(1))[0]
+        if not len(rows):
+            return None
+        xs = np.nonzero(al[rows.max() - 2:rows.max() + 1].any(0))[0]
         return int(xs.max()) if len(xs) else None
 
     if a.align_front_shoe:
@@ -128,16 +137,24 @@ def main():
 
     # body edits (smear / flash) and the fx layer, from the plan's "fx" tags
     fx_layers, tip = [], None
+    # strike band: rows (from the top of the character) where the striking part is, as fractions of its height
+    sb = plan.get("strike_band", [9 / 33, 18 / 33])
+    band = (round(sb[0] * bh), round(sb[1] * bh))
+    # rule 44.5: smears use the object's two brightest colours
+    opaque = snap(base, pal)[base[..., 3] > 0][:, :3]
+    uniq = np.unique(opaque, axis=0)
+    lum = uniq @ np.array([0.299, 0.587, 0.114])
+    bright = [tuple(int(v) for v in uniq[i]) + (255,) for i in np.argsort(-lum)[:2]]
     frames_index = lambda img: next(k for k, g in enumerate(frames) if g is img)
     for f, spec in zip(frames, specs):
         layer = np.zeros_like(f)
         kind = spec.get("fx")
         if kind in ("smear", "smear2", "impact"):
-            tip = fx.fist_tip(f)
+            tip = fx.fist_tip(f, band)
         if kind in ("smear", "smear2"):
             # rule 44.5: opaque streak in the arm's two brightest colours, from where the fist was (chin)
             # to where it will be (next frame's reach); the first smear is the widest, the second a thin trail
-            nxt = fx.fist_tip(frames[min(len(frames) - 1, frames_index(f) + 1)])
+            nxt = fx.fist_tip(frames[min(len(frames) - 1, frames_index(f) + 1)], band)
             x0, y0 = tip[0] - 5, tip[1]
             x1, y1 = max(nxt[0], tip[0]), nxt[1]
             if kind == "smear":
@@ -149,11 +166,26 @@ def main():
                 for yy in range(yc - half, yc + half + 1):
                     if 0 <= yy < f.shape[0] and 0 <= x < f.shape[1]:
                         f[yy, x] = (59, 141, 172, 255) if yy < yc or (half == 0) else (39, 57, 97, 255)
+                        if plan.get("smear_colors") == "bright":
+                            f[yy, x] = bright[0] if yy < yc or half == 0 else bright[1]
             if kind == "smear":
                 for x in range(x1 - 3, x1 + 1):         # leading edge = fist at full reach, outlined
                     for yy in (y1 - 2, y1 + 2):
                         if 0 <= yy < f.shape[0]:
                             f[yy, x] = (3, 1, 4, 255)
+        elif kind == "arc":
+            # crescent slash fan in front of the body: swept from up-back to forward-down, thickest at the leading end
+            ys_, xs_ = np.nonzero(f[..., 3])
+            cx, cy = int(xs_.min() + 0.55 * (xs_.max() - xs_.min())), int(ys_.min() + 0.45 * (ys_.max() - ys_.min()))
+            r = 0.55 * (ys_.max() - ys_.min())
+            for k in range(0, 121):
+                t = k / 120
+                ang = np.radians(-110 + 140 * t)
+                width = 1 + 4 * t ** 1.5
+                for d in np.arange(0, width, 0.5):
+                    x = int(round(cx + (r - d) * np.cos(ang))); y = int(round(cy + (r - d) * np.sin(ang)))
+                    if 0 <= y < layer.shape[0] and 0 <= x < layer.shape[1]:
+                        layer[y, x] = bright[0] if d < width * 0.5 else bright[1]
         elif kind == "impact":
             fx.flash(f, tip)
             fx.spark(layer, tip[0] + 3, tip[1], 0)

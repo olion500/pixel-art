@@ -1,0 +1,29 @@
+{
+  "name": "idle breathing loop",
+  "cols": 4,
+  "ground_align": true,
+  "reference_cell": false,
+  "rules": [
+    "The character stays in place; both feet stay on the same pixels unless the pose says the front foot lunges.",
+    "The face pixels (eyes, mouth) are identical in every frame; the head stays upright.",
+    "The fox tail and the teal cloak lag one frame behind the body and swing opposite to its motion."
+  ],
+  "frames": [
+    {
+      "ms": 300,
+      "pose": "the original pose, unchanged"
+    },
+    {
+      "ms": 150,
+      "pose": "exhale: torso and arms 1 pixel lower, feet unchanged, the tail tip still up"
+    },
+    {
+      "ms": 300,
+      "pose": "exhale hold: same body as cell 2, the tail tip now 1 pixel lower, one ear tip flicked 1 pixel"
+    },
+    {
+      "ms": 150,
+      "pose": "inhale: body back up as in cell 1, the tail tip still low"
+    }
+  ]
+}

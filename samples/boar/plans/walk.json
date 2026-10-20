@@ -1,0 +1,51 @@
+{
+  "name": "four-legged walk cycle",
+  "cols": 3,
+  "ground_align": true,
+  "reference_cell": true,
+  "rules": [
+    "Side view facing right; the creature keeps exactly the same size and design in every cell; the stone shell plates are rigid.",
+    "The head lags one frame behind the body; the stubby tail moves on its own rhythm.",
+    "Heavy creature: very small bounce, slow wind-ups, long recoveries.",
+    "Four-beat lateral walk: the legs land in the order near hind, near fore, far hind, far fore; at least two hooves are always on the ground line; a lifted hoof rises only 1-2 pixels; the body bobs 1 pixel at most.",
+    "The creature walks IN PLACE (no travel across the cell): planted hooves slide backward under the body."
+  ],
+  "frames": [
+    {
+      "ms": 0,
+      "pose": "reference: the original standing pose, unchanged"
+    },
+    {
+      "ms": 120,
+      "pose": "near hind leg planted forward under the belly, far front leg lifting"
+    },
+    {
+      "ms": 120,
+      "pose": "near front leg planted forward, near hind leg pushed back, body 1 pixel lower"
+    },
+    {
+      "ms": 120,
+      "pose": "far hind leg planted forward, near front leg pushed back"
+    },
+    {
+      "ms": 120,
+      "pose": "far front leg planted forward, far hind leg pushed back, body 1 pixel lower"
+    },
+    {
+      "ms": 120,
+      "pose": "near hind leg lifting and swinging forward, other three hooves on the ground"
+    },
+    {
+      "ms": 120,
+      "pose": "near front leg lifting and swinging forward, body back up"
+    },
+    {
+      "ms": 120,
+      "pose": "far hind leg lifting and swinging forward"
+    },
+    {
+      "ms": 120,
+      "pose": "far front leg lifting and swinging forward, body 1 pixel lower"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "name": "charging gore attack",
+  "cols": 4,
+  "ground_align": true,
+  "reference_cell": false,
+  "rules": [
+    "Side view facing right; the creature keeps exactly the same size and design in every cell; the stone shell plates are rigid.",
+    "The head lags one frame behind the body; the stubby tail moves on its own rhythm.",
+    "Heavy creature: very small bounce, slow wind-ups, long recoveries."
+  ],
+  "frames": [
+    {
+      "ms": 120,
+      "pose": "stance: the original pose, unchanged"
+    },
+    {
+      "ms": 150,
+      "pose": "wind-up: head dropped low, weight shifted back onto the hind legs, front hooves digging in"
+    },
+    {
+      "ms": 250,
+      "pose": "wind-up hold: head at its lowest with the tusks pointing forward, back shell raised; a clear readable telegraph"
+    },
+    {
+      "ms": 50,
+      "pose": "lunge: the whole body thrown 6 pixels forward, tusks leading, front legs reaching forward",
+      "fx": "smear"
+    },
+    {
+      "ms": 120,
+      "pose": "GORE HIT: tusks thrust forward and up at full reach, front legs braced, body stretched forward",
+      "fx": "impact"
+    },
+    {
+      "ms": 80,
+      "pose": "follow-through: head tossed up past the hit, body still forward",
+      "fx": "spark1"
+    },
+    {
+      "ms": 150,
+      "pose": "recover: pulling back toward the stance, heavy and slow",
+      "fx": "spark2"
+    },
+    {
+      "ms": 80,
+      "pose": "overshoot: the stance of cell 1 with the body 1 pixel further back, shell settling",
+      "fx": "spark3"
+    }
+  ],
+  "strike_band": [
+    0.35,
+    0.8
+  ],
+  "smear_colors": "bright"
+}
